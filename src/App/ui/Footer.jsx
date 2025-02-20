@@ -5,8 +5,7 @@ import Logo from '../ui/Logo'
 function Footer() {
 
     const logo = (
-        <Link to='/'
-            onClick={() => window.scrollTo(0, 0)}>
+        <Link to='/'>
             <Logo />
         </Link>
     )
