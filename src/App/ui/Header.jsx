@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { Link, NavLink, useMatch } from 'react-router';
 import { LuMenu, LuX } from "react-icons/lu";
 import Logo from './Logo';
+import OpenWeatherAPI from './OpenWeatherAPI';
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,7 +16,7 @@ export default function Header() {
   return (
     <>
       {/* Fixed Header */}
-      <header className="fixed top-0 left-0 right-0 bg-white border-b border-gray-100 z-50">
+      <header className="relative bg-white border-b border-gray-100 z-50">
         <div className="h-16 px-4 flex items-center justify-between">
           {/* Logo */}
           <Link to="/">
@@ -52,13 +53,13 @@ export default function Header() {
       {/* Mobile Navigation Menu */}
       <div 
         className={`
-          sm:hidden fixed left-0 right-0 bg-white
+          sm:hidden bg-white
           transition-transform duration-300 ease-in-out
           ${isOpen ? 'translate-y-16' : '-translate-y-full'}
-          z-40
+          z-40 flex flex-col h-[50vh]
         `}
       >
-        <nav className="h-[50vh] flex flex-col justify-center items-center py-8 space-y-8">
+        <nav className="flex-1 flex flex-col justify-center items-center py-8 space-y-8">
           {navItems.map((item) => {
             const isActive = useMatch(item.path);
             return (
@@ -66,7 +67,7 @@ export default function Header() {
                 key={item.label}
                 to={item.path}
                 className={`
-                  text-xl
+                  text-2xl sm:text-2xl md:text-3xl lg:text-4xl
                   ${isActive ? 'font-bold' : ''}
                 `}
                 onClick={() => setIsOpen(false)}
@@ -76,6 +77,9 @@ export default function Header() {
             );
           })}
         </nav>
+        <div className="p-4 sm:p-6 md:p-8 lg:p-10">
+          <OpenWeatherAPI className="w-full sm:w-11/12 md:w-10/12 lg:w-9/12 mx-auto"/>
+        </div>
       </div>
 
       {/* Spacer to prevent content from hiding under fixed header */}
