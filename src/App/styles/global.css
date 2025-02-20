@@ -1,4 +1,9 @@
 @import "tailwindcss";
 
-
+@theme {
+    --font-jost: 'Jost', 'Poppins', serif;
+    --font-comfortaa: 'Comfortaa', 'Poppins', serif;
+    --font-poppins: 'Poppins', 'serif';
+    --font-noto-thai: "Noto Sans Thai Looped", serif;
+}
 

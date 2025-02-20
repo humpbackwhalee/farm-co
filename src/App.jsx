@@ -1,13 +1,24 @@
-
+import {
+    RouterProvider,
+    createBrowserRouter,
+    createRoutesFromElements,
+    Route,
+} from "react-router"
 
 
 // Import 
+import MainLayout from "./App/layout/MainLayout";
+
+const router = createBrowserRouter(
+    createRoutesFromElements(
+        <Route path="/" element={<MainLayout />} >
+        </Route >
+    )
+)
 
 function App() {
     return (
-        <div>
-            <h1 className="text-3xl">f a r m</h1>
-        </div>
+        <RouterProvider router={router} />
     )
 }
 
