@@ -4,6 +4,7 @@ import { SlScreenDesktop } from "react-icons/sl";
 import { Link, useNavigate, useLocation } from 'react-router';
 import { Helmet } from 'react-helmet';
 import { ErrorBoundary } from 'react-error-boundary';
+import { useTranslation } from '../components/LanguageToggle';
 
 // Add ErrorComponent definition
 const ErrorComponent = () => {
@@ -31,9 +32,11 @@ import heroImage from '../public/images/Garden_Plans_Calculator.jpg';
 import designImage from '../public/images/Garden_Plans.jpg';
 import step1Image from '../public/images/Garden_Plans_Calculator_Step_1.jpg';
 import step2Image from '../public/images/Garden_Plans_Calculator_Step_2.jpg';
-import step3Image from '../public/images/Garden_Plans_Calculator_Step_1.jpg';
+import step3Image from '../public/images/Garden_Plans_Calculator_Step_3.jpg';
 
 function TheHomePage() {
+  const t = useTranslation();
+
   const HeroSection = () => {
     return (
       <section
@@ -44,23 +47,23 @@ function TheHomePage() {
         
         <div className="container mx-auto px-4 text-center relative z-10">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-white">
-            Grow Your Dream Garden
+            {t.homeHeroTitle}
           </h1>
           <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 mb-8">
-            Easy Planning & Expert Guidance
+            {t.homeHeroSubtitle}
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
             <Link 
               to="/design" 
               className="px-6 py-2 sm:py-3 text-sm sm:text-base bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors"
             >
-              Start Designing
+              {t.startDesigning}
             </Link>
             <Link 
               to="/introduction" 
               className="px-6 py-2 sm:py-3 text-sm sm:text-base bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors"
             >
-              Explore Guide
+              {t.exploreGuide}
             </Link>
           </div>
         </div>

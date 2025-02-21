@@ -5,7 +5,7 @@ import { AiOutlineBorder } from "react-icons/ai";
 import { FaCircle, FaRegDotCircle } from "react-icons/fa";
 import { CgMenuGridO } from "react-icons/cg";
 import { BsToggleOn, BsToggleOff } from "react-icons/bs";
-
+import { useTranslation } from '../components/LanguageToggle';
 // ToggleButton Component
 const ToggleButton = ({ isOn, onToggle, label }) => {
   return (
@@ -168,6 +168,7 @@ const convertToMeters = (value, unit) => {
 };
 
 const PlotCalculator = () => {
+  const t = useTranslation();
   // Add state for toggle
   const [showDimensions, setShowDimensions] = useState(true);
 
@@ -349,7 +350,7 @@ const PlotCalculator = () => {
 
   // Component for dimension inputs
   const DimensionInput = ({ label, field, sign }) => (
-    <div className="space-y-2">
+    <div className="w-full space-y-2">
       <label className="flex flex-row items-center px-2 gap-2 text-sm font-medium text-gray-700">{label} {sign}</label>
       <div className="flex gap-2">
         <input
@@ -357,12 +358,12 @@ const PlotCalculator = () => {
           value={dimensions[field].value}
           min="0"
           onChange={(e) => handleDimensionChange(field, e.target.value)}
-          className="flex-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-2/3 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
         <select
           value={dimensions[field].unit}
           onChange={(e) => handleDimensionChange(field, dimensions[field].value, e.target.value)}
-          className="w-fit p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-20 flex-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         >
           <option value="m">m</option>
           <option value="cm">cm</option>
@@ -378,16 +379,16 @@ const PlotCalculator = () => {
     <div className="min-h-screen flex flex-col md:flex-row justify-center font-poppins text-base bg-mainBG-light shadow-inner">
 
       {/* Input form */}
-      <div className="md:m-4 p-2 bg-white rounded-lg shadow-md">
+      <div className="w-full md:max-w-1/4 md:m-2 p-2 bg-white rounded-lg shadow-md">
         <div>
           <p className="text-2xl pt-4 text-center">
-            Garden calculator</p>
+            {t.designTitle}</p>
         </div>
 
         <div className="p-4 space-y-4">
           {/* Pattern selection */}
           <label className="flex flex-row justify-between px-2 text-sm font-medium text-gray-700">
-            Planting Pattern:
+            {t.pattern}:
             <CgMenuGridO
               className={`text-lg ${dimensions.pattern !== 'square' ? 'rotate-45' : ''}`}
             />
@@ -397,16 +398,16 @@ const PlotCalculator = () => {
             onChange={handlePatternChange}
             className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
-            <option value="square">Square Grid</option>
-            <option value="triangle">Triangular Grid</option>
-            <option value="rectangle">Rectangular Grid</option>
+            <option value="square">{t.square}</option>
+            <option value="triangle">{t.triangle}</option>
+            <option value="rectangle">{t.rectangle}</option>
           </select>
 
           {/* Grid pattern adjustments */}
           {dimensions.pattern !== 'square' && (
             <div className="space-y-4">
               <div className="space-y-2">
-                <label className="flex flex-row justify-between items-center px-2 text-sm font-medium text-gray-700">Grid Width Multiplier
+                <label className="flex flex-row justify-between items-center px-2 text-sm font-medium text-gray-700">{t.gridWidthMultiplier}
                   <CgArrowsExpandDownRight className="text-lg -rotate-45" /> </label>
                 <input
                   type="number"
@@ -419,7 +420,7 @@ const PlotCalculator = () => {
                 />
               </div>
               <div className="space-y-2">
-                <label className="flex flex-row justify-between items-center px-2 text-sm font-medium text-gray-700">Grid Height Multiplier
+                <label className="flex flex-row justify-between items-center px-2 text-sm font-medium text-gray-700">{t.gridHeightMultiplier}
                   <CgArrowsExpandDownRight className="text-lg -rotate-135" />
                 </label>
                 <input
@@ -436,29 +437,29 @@ const PlotCalculator = () => {
           )}
 
           {/* Dimension inputs */}
-          <DimensionInput label="Garden Width" field="width" sign={<CgArrowsShrinkH className="text-lg" />} />
-          <DimensionInput label="Garden Height" field="height" sign={<CgArrowsShrinkH className="text-lg rotate-90" />} />
-          <DimensionInput label="Plant Diameter" field="plantDiameter" sign={<FaCircle className="text-sm" />} />
-          <DimensionInput label="Plant Spacing" field="spacing" sign={<FaRegDotCircle className="text-lg" />} />
-          <DimensionInput label="Border Width" field="border" sign={<AiOutlineBorder className="text-lg" />} />
+          <DimensionInput label={t.gardenWidth} field="width" sign={<CgArrowsShrinkH className="text-lg" />} />
+          <DimensionInput label={t.gardenHeight} field="height" sign={<CgArrowsShrinkH className="text-lg rotate-90" />} />
+          <DimensionInput label={t.plantDiameter} field="plantDiameter" sign={<FaCircle className="text-sm" />} />
+          <DimensionInput label={t.plantSpacing} field="spacing" sign={<FaRegDotCircle className="text-lg" />} />
+          <DimensionInput label={t.borderWidth} field="border" sign={<AiOutlineBorder className="text-lg" />} />
 
           {/* Results display */}
           <div className="mt-6 p-4 bg-mainBG-light rounded-lg drop-shadow-sm space-y-2">
-            <p className="text-sm text-gray-600">Total Area: <span className="font-medium text-gray-900">{results.totalArea.toFixed(2)} m²</span></p>
-            <p className="text-sm text-gray-600">Planting Area: <span className="font-medium text-gray-900">{results.plotArea.toFixed(2)} m²</span></p>
-            <p className="text-sm text-gray-600">Border Area: <span className="font-medium text-gray-900">{results.borderArea.toFixed(2)} m²</span></p>
-            <p className="text-sm text-gray-600">Number of Plants: <span className="font-medium text-gray-900">{results.plantCount}</span></p>
+            <p className="text-sm text-gray-600">{t.totalArea}: <span className="font-medium text-gray-900">{results.totalArea.toFixed(2)} m²</span></p>
+            <p className="text-sm text-gray-600">{t.plantingArea}: <span className="font-medium text-gray-900">{results.plotArea.toFixed(2)} m²</span></p>
+            <p className="text-sm text-gray-600">{t.borderArea}: <span className="font-medium text-gray-900">{results.borderArea.toFixed(2)} m²</span></p>
+            <p className="text-sm text-gray-600">{t.plantCount}: <span className="font-medium text-gray-900">{results.plantCount}</span></p>
             <div className="space-y-2">
               {dimensions.pattern === 'square' && (
-                <p className="text-sm text-gray-600">Plants in Triangle: <span className="font-medium text-gray-900">{results.trianglePlantCount}</span></p>
+                <p className="text-sm text-gray-600">{t.plantsInTriangle}: <span className="font-medium text-gray-900">{results.trianglePlantCount}</span></p>
               )}
               {dimensions.pattern === 'triangle' && (
-                <p className="text-sm text-gray-600">Plants in Square: <span className="font-medium text-gray-900">{results.squarePlantCount}</span></p>
+                <p className="text-sm text-gray-600">{t.plantsInSquare}: <span className="font-medium text-gray-900">{results.squarePlantCount}</span></p>
               )}
               {dimensions.pattern === 'rectangle' && (
                 <>
-                  <p className="text-sm text-gray-600">Plants in Square: <span className="font-medium text-gray-900">{results.squarePlantCount}</span></p>
-                  <p className="text-sm text-gray-600">Plants in Triangle: <span className="font-medium text-gray-900">{results.trianglePlantCount}</span></p>
+                  <p className="text-sm text-gray-600">{t.plantsInSquare}: <span className="font-medium text-gray-900">{results.squarePlantCount}</span></p>
+                  <p className="text-sm text-gray-600">{t.plantsInTriangle}: <span className="font-medium text-gray-900">{results.trianglePlantCount}</span></p>
                 </>
               )}
             </div>
@@ -468,12 +469,12 @@ const PlotCalculator = () => {
 
       {/* Visualization */}
       {/* Container for the visualization */}
-      <div className="relative m-4 py-10 px-10 bg-white rounded-lg shadow-md">
+      <div className="relative mx-8 py-10 px-10 bg-white rounded-lg shadow-md">
         {/* Toggle Button */}
         <ToggleButton
           isOn={showDimensions}
           onToggle={() => setShowDimensions(!showDimensions)}
-          label="Dimensions"
+          label={t.dimensions}
         />
         {/* Container for the Area (Area > Border > Plot) */}
         <div
