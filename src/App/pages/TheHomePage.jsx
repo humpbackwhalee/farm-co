@@ -30,7 +30,7 @@ const ErrorComponent = () => {
 import heroImage from '../public/images/Garden_Plans_Calculator.jpg';
 import designImage from '../public/images/Garden_Plans.jpg';
 import step1Image from '../public/images/Garden_Plans_Calculator_Step_1.jpg';
-import step2Image from '../public/images/Garden_Plans_Calculator_Step_1.jpg';
+import step2Image from '../public/images/Garden_Plans_Calculator_Step_2.jpg';
 import step3Image from '../public/images/Garden_Plans_Calculator_Step_1.jpg';
 
 function TheHomePage() {

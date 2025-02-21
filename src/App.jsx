@@ -12,11 +12,13 @@ import MainLayout from "./App/layout/MainLayout";
 
 // Import Pages
 import TheHomePage from "./App/pages/TheHomePage";
+import TheDesignPage from "./App/pages/TheDesignPage";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
         <Route path="/" element={<MainLayout />} >
             <Route index element={<TheHomePage />} />
+            <Route path="/design" element={<TheDesignPage />} />
         </Route >
     )
 )
