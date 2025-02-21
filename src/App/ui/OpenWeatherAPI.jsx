@@ -37,7 +37,9 @@ function OpenWeatherAPI() {
             {error ? (
                 <p className="text-red-500 mt-2">Error: {error}</p>
             ) : (
-                <p className="mt-2">{temperature !== null ? `The temperature in ${city} is ${temperature}°C` : "Loading..."}</p>
+                // <p className="mt-2">{temperature !== null ? `The temperature in ${city} is ${temperature}°C` : "Loading..."}
+                <p className="mt-2">{temperature !== null ? `${temperature}°C` : "Loading..."}
+                </p>
             )}
         </div>
     );

@@ -1,12 +1,12 @@
-import { useState, useMemo } from 'react';
-import { Link, NavLink, useMatch } from 'react-router';
+import { useState, useRef, useEffect, useMemo } from 'react';
+import { Link, NavLink } from 'react-router';
 import { LuMenu, LuX } from "react-icons/lu";
-import Logo from './Logo';
+import Logo from '../ui/Logo';
 import OpenWeatherAPI from './OpenWeatherAPI';
 
-export default function Header() {
+export default function Header({ theme = 'light' }) {
   const [isOpen, setIsOpen] = useState(false);
-  
+
   const navItems = useMemo(() => [
     { label: 'Design', path: '/design' },
     { label: 'Blog', path: '/blog' },
@@ -15,75 +15,65 @@ export default function Header() {
 
   return (
     <>
-      {/* Fixed Header */}
-      <header className="relative bg-white border-b border-gray-100 z-50">
-        <div className="h-16 px-4 flex items-center justify-between">
+      <header className={`
+        w-full z-50
+        ${theme === 'light' ? 'bg-white border-gray-100' : 'bg-gray-900 border-gray-800 text-white'}
+        border-b
+      `} role="banner">
+        <div className="h-12 px-4 flex items-center justify-between">
           {/* Logo */}
-          <Link to="/">
+          <Link to="/" className="flex-shrink-0">
             <Logo />
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden sm:flex items-center space-x-8">
-            {navItems.map((item) => {
-              const isActive = useMatch(item.path);
-              return (
-                <NavLink
-                  key={item.label}
-                  to={item.path}
-                  className={`text-xl ${isActive ? 'font-bold' : ''}`}
-                >
-                  {item.label}
-                </NavLink>
-              );
-            })}
+          <nav className="hidden md:flex items-center space-x-8" role="navigation" aria-label="Main navigation">
+            {navItems.map((item) => (
+              <NavLink
+                key={item.label}
+                to={item.path}
+                className={({ isActive }) => `${isActive ? 'font-bold' : ''}`}
+              >
+                {item.label}
+              </NavLink>
+            ))}
           </nav>
 
-          {/* Menu Button - Mobile Only */}
-          <button 
+          {/* Menu Button - Hidden on medium and large screens */}
+          <button
             onClick={() => setIsOpen(!isOpen)}
-            className="p-2 text-emerald-900 sm:hidden"
+            className=" md:hidden"
             aria-label={isOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isOpen}
           >
-            {isOpen ? <LuX className="h-6 w-6" /> : <LuMenu className="h-6 w-6" />}
+            {isOpen ? <LuX size={30} /> : <LuMenu size={30} />}
           </button>
         </div>
       </header>
 
       {/* Mobile Navigation Menu */}
-      <div 
-        className={`
-          sm:hidden bg-white
-          transition-transform duration-300 ease-in-out
-          ${isOpen ? 'translate-y-16' : '-translate-y-full'}
-          z-40 flex flex-col h-[50vh]
-        `}
+      <div
+        className={`bg-white md:hidden absolute top-12 left-0 right-0 z-40 shadow-lg transform transition-transform duration-700 ease-in-out ${isOpen
+            ? 'opacity-100 translate-y-0 pointer-events-auto'
+            : 'opacity-0 -translate-y-full pointer-events-none'
+          }`}
       >
-        <nav className="flex-1 flex flex-col justify-center items-center py-8 space-y-8">
-          {navItems.map((item) => {
-            const isActive = useMatch(item.path);
-            return (
-              <NavLink
-                key={item.label}
-                to={item.path}
-                className={`
-                  text-2xl sm:text-2xl md:text-3xl lg:text-4xl
-                  ${isActive ? 'font-bold' : ''}
-                `}
-                onClick={() => setIsOpen(false)}
-              >
-                {item.label}
-              </NavLink>
-            );
-          })}
+        <nav className="flex flex-col justify-center items-center h-[calc(100vh-3rem)]">
+          {navItems.map((item) => (
+            <NavLink
+              key={item.label}
+              to={item.path}
+              onClick={() => setIsOpen(false)}
+              className={({ isActive }) => `
+                py-2 px-4 w-full text-center
+                ${isActive ? 'font-bold' : ''}
+              `}
+            >
+              {item.label}
+            </NavLink>
+          ))}
         </nav>
-        <div className="p-4 sm:p-6 md:p-8 lg:p-10">
-          <OpenWeatherAPI className="w-full sm:w-11/12 md:w-10/12 lg:w-9/12 mx-auto"/>
-        </div>
       </div>
-
-      {/* Spacer to prevent content from hiding under fixed header */}
-      <div className="h-16" />
     </>
   );
 }
