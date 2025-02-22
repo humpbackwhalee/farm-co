@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { Link, useNavigate, useLocation } from "react-router";
 import { IoIosArrowDropleft, IoIosArrowDropright } from "react-icons/io";
-import { useTranslation } from '../components/LanguageToggle';
+import { useTranslation } from '../components/LanguageContext';
 
 /**
  * TheBlogPage Component

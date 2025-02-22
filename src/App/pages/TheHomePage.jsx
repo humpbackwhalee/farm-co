@@ -4,7 +4,7 @@ import { SlScreenDesktop } from "react-icons/sl";
 import { Link, useNavigate, useLocation } from 'react-router';
 import { Helmet } from 'react-helmet';
 import { ErrorBoundary } from 'react-error-boundary';
-import { useTranslation } from '../components/LanguageToggle';
+import { useTranslation } from '../components/LanguageContext';
 
 // Add ErrorComponent definition
 const ErrorComponent = () => {

@@ -5,7 +5,7 @@ import { AiOutlineBorder } from "react-icons/ai";
 import { FaCircle, FaRegDotCircle } from "react-icons/fa";
 import { CgMenuGridO } from "react-icons/cg";
 import { BsToggleOn, BsToggleOff } from "react-icons/bs";
-import { useTranslation } from '../components/LanguageToggle';
+import { useTranslation } from '../components/LanguageContext';
 // ToggleButton Component
 const ToggleButton = ({ isOn, onToggle, label }) => {
   return (
@@ -513,7 +513,7 @@ const PlotCalculator = () => {
 
               {/* Border Dimension */}
               <div
-                className="absolute -top-4 right-0 bg-black flex items-center z-50"
+                className="absolute -top-4 right-0 bg-black flex items-center z-30"
                 style={{
                   width: `${Math.max(1, convertToMeters(dimensions.border.value, dimensions.border.unit) * scale)}px`,
                   height: "1px",
@@ -523,7 +523,7 @@ const PlotCalculator = () => {
               <div>
                 {dimensions.border.value !== 0 && (
                   <p
-                    className="absolute -top-10 -right-0 z-50 text-sm font-medium text-black pl-10"
+                    className="absolute -top-10 -right-0 z-30 text-sm font-medium text-black pl-10"
                   >
                     Border: {dimensions.border.value / 2} {dimensions.border.unit}
                   </p>

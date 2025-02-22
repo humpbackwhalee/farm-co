@@ -15,7 +15,7 @@ const ThemeToggle = () => {
                 ${isDark
                     ? 'bg-gray-800 hover:bg-gray-700 text-white'
                     : 'bg-gray-100 hover:bg-gray-200 text-gray-700'}
-            `}
+                `}
             aria-label={`Switch to ${isDark ? 'light' : 'dark'} theme`}
         >
             {isDark ? (

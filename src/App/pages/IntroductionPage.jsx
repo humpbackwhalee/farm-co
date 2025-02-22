@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router";
-import { useTranslation } from '../components/LanguageToggle';
+import { useTranslation } from '../components/LanguageContext';
 
 function IntroductionPage() {
     const t = useTranslation();
