@@ -19,6 +19,7 @@ import TheAboutUsPage from "./App/pages/TheAboutUsPage";
 
 import IntroductionPage from "./App/pages/IntroductionPage";
 
+// Import LanguageToggle
 import { LanguageProvider } from "./App/components/LanguageToggle";
 
 const router = createBrowserRouter(
