@@ -10,7 +10,7 @@ function MainLayout() {
   return (
     <ThemeProvider>
       <Header />
-      <main>
+      <main className='min-h-screen font-poppins'>
         <Outlet />
       </main>
       <Footer />

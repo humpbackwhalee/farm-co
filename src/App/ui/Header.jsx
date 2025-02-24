@@ -10,22 +10,8 @@ import Logo from '../ui/Logo';
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isClosing, setIsClosing] = useState(false);
   const { theme } = useTheme();
   const t = useTranslation();
-
-  // Close mobile menu when screen size changes to desktop
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768 && isOpen) {
-        setIsOpen(false);
-        setIsClosing(false);
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [isOpen]);
 
   const navItems = useMemo(() => [
     { label: t.design, path: '/design', ariaLabel: `${t.design} page` },
@@ -37,6 +23,9 @@ export default function Header() {
     <>
       <header
         className={`w-full h-16 px-2 sm:px-4 flex justify-between items-center z-30 
+          ${isOpen
+            ? 'fixed top-0 z-30'
+            : ' '}
           ${theme === 'light'
             ? 'bg-white'
             : 'bg-gray-900 text-white'
@@ -45,18 +34,17 @@ export default function Header() {
         role="banner"
       >
         {/* Logo */}
-        <div className='z-50'
-          onClick={() => setIsOpen(false)}>
+        <div onClick={() => setIsOpen(false)}>
           <Logo />
         </div>
 
         {/* Desktop Navigation */}
-        <nav className={'hidden sm:flex flex-row justify-center items-center space-x-4'}>
+        <nav className={'hidden sm:flex flex-row justify-center items-center gap-4'}>
           {navItems.map((item) => (
             <NavLink
               key={item.label}
               to={item.path}
-              className={({ isActive }) => `${isActive ? 'font-bold' : ''}`}
+              className={({ isActive }) => `font-comfortaa ${isActive ? 'font-bold' : ''}`}
               role='navigation'
               aria-label='Main navigation'
             >
@@ -73,17 +61,17 @@ export default function Header() {
         <div className='sm:hidden'>
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className='py-2'
+            className='py-2 text-3xl'
             aria-label={isOpen ? 'Close menu' : 'Open menu'}
           >
-            {isOpen ? <LuX className='text-3xl' /> : <LuMenu className='text-3xl' />}
+            {isOpen ? <LuX /> : <LuMenu />}
           </button>
         </div>
       </header >
 
       {/* Mobile Navigation Menu */}
       <div
-        className={`fixed top-16 left-0 right-0 z-50 bg-white overflow-hidden transition-all duration-800 ease-in-out 
+        className={`fixed top-16 left-0 right-0 z-50 bg-white overflow-hidden transition-all duration-650 ease-in-out 
           ${isOpen
             ? "max-h-screen opacity-100"
             : "max-h-0 opacity-0"
@@ -95,7 +83,7 @@ export default function Header() {
               onClick={() => setIsOpen(false)}
               key={item.label}
               to={item.path}
-              className={({ isActive }) => `${isActive ? "font-bold" : ""}`}
+              className={({ isActive }) => `font-comfortaa text-3xl ${isActive ? "font-bold" : ""}`}
               role="navigation"
               aria-label="Main navigation"
             >

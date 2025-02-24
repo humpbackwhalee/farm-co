@@ -5,5 +5,11 @@
     --font-comfortaa: 'Comfortaa', 'Poppins', serif;
     --font-poppins: 'Poppins', 'serif';
     --font-noto-thai: "Noto Sans Thai Looped", serif;
+
+    --color-btn-primary: #88b04b;
+    --color-btn-primary-hover: #44883c;
+
+    --color-btn-secondary: #b2e79f;
+    --color-btn-secondary-hover: #202020;
 }
 

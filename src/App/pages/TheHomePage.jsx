@@ -2,9 +2,10 @@ import React, { useState, useEffect, useRef, useMemo, lazy } from 'react';
 import { FaCalculator, FaSeedling, FaLightbulb, FaBookOpen, FaRulerCombined, FaSlidersH } from 'react-icons/fa';
 import { SlScreenDesktop } from "react-icons/sl";
 import { Link, useNavigate, useLocation } from 'react-router';
-import { Helmet } from 'react-helmet';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from '../components/LanguageContext';
+import { Helmet } from 'react-helmet';
+import { BottomMain, BottomSecondary } from '../ui/BottonStyle';
 
 // Add ErrorComponent definition
 const ErrorComponent = () => {
@@ -17,8 +18,8 @@ const ErrorComponent = () => {
         <p className="text-gray-600 mb-4">
           We're sorry, but there was an error loading this page.
         </p>
-        <button 
-          onClick={() => window.location.reload()} 
+        <button
+          onClick={() => window.location.reload()}
           className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
         >
           Refresh Page
@@ -28,11 +29,14 @@ const ErrorComponent = () => {
   );
 };
 
+// Import images
 import heroImage from '../public/images/Garden_Plans_Calculator.jpg';
 import designImage from '../public/images/Garden_Plans.jpg';
-import step1Image from '../public/images/Garden_Plans_Calculator_Step_1.jpg';
-import step2Image from '../public/images/Garden_Plans_Calculator_Step_2.jpg';
-import step3Image from '../public/images/Garden_Plans_Calculator_Step_3.jpg';
+import step1Image from '../public/images/calculate_step_1.png';
+import step2Image from '../public/images/calculate_step_2.png';
+import step3Image from '../public/images/calculate_step_3.png';
+
+import calculate_tools from '../public/images/calculate_tools.png';
 
 function TheHomePage() {
   const t = useTranslation();
@@ -41,30 +45,20 @@ function TheHomePage() {
     return (
       <section
         style={{ backgroundImage: `url('${heroImage}')` }}
-        className="relative h-[calc(100vh-4rem)] flex justify-center items-center bg-cover bg-center bg-no-repeat rounded-lg mx-4"
+        className="relative h-[calc(100vh-6rem)] sm:h-[calc(100vh-5rem)] flex justify-center items-center bg-cover bg-center bg-no-repeat rounded-lg mx-4"
       >
-        <div className="absolute inset-0 bg-black/40 rounded-lg"></div>
-        
+        <div className="absolute inset-0 bg-black/20 rounded-lg"></div>
+
         <div className="container mx-auto px-4 text-center relative z-10">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-white">
+          <h1 className="text-4xl sm:text-6xl font-jost font-bold leading-tight mb-4 text-white">
             {t.homeHeroTitle}
           </h1>
-          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 mb-8">
+          <p className="text-xl sm:text-2xl font-poppins text-white/90 mb-8">
             {t.homeHeroSubtitle}
           </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
-            <Link 
-              to="/design" 
-              className="px-6 py-2 sm:py-3 text-sm sm:text-base bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors"
-            >
-              {t.startDesigning}
-            </Link>
-            <Link 
-              to="/introduction" 
-              className="px-6 py-2 sm:py-3 text-sm sm:text-base bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors"
-            >
-              {t.exploreGuide}
-            </Link>
+          <div className="flex flex-col sm:flex-row justify-center gap-2 sm:gap-4">
+            <BottomMain to="/design" text={t.startDesigning} />
+            <BottomSecondary to="/introduction" text={t.exploreGuide} />
           </div>
         </div>
       </section>
@@ -74,35 +68,35 @@ function TheHomePage() {
   const FeatureSection = () => {
     const features = useMemo(() => [
       {
-        icon: <FaSlidersH className="h-12 w-12 mx-auto mb-4 text-blue-500" />,
+        icon: <FaSlidersH className="h-12 w-12 mx-auto mb-4 text-blue-600" />,
         title: 'Calculate Planting Area',
         description: 'Accurately determines the plantable space in your garden.',
       },
       {
-        icon: <FaRulerCombined className="h-12 w-12 mx-auto mb-4 text-blue-500" />,
+        icon: <FaRulerCombined className="h-12 w-12 mx-auto mb-4 text-blue-600" />,
         title: 'Optimize Plant Spacing',
         description: 'Helps you determine the optimal spacing between plants based on their size and your chosen layout. Proper spacing ensures healthy growth and prevents overcrowding.',
       },
       {
-        icon: <SlScreenDesktop className="h-12 w-12 mx-auto mb-4 text-blue-500" />,
-        title: ' Visualize Your Garden',
+        icon: <SlScreenDesktop className="h-12 w-12 mx-auto mb-4 text-blue-600" />,
+        title: 'Visualize Your Garden',
         description: 'Provides a visual representation of your garden layout, showing the placement of plants based on your chosen settings. This allows you to see how your garden will look and make adjustments as needed.',
       },
     ], []);
 
     return (
-      <section className="py-8 sm:py-12 md:py-16 lg:py-20 bg-gray-50">
+      <section className="my-2 py-2 sm:my-4 sm:py-4">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-12">
+          <div className="flex flex-wrap justify-center gap-4">
             {features.map((feature, index) => (
-              <div 
+              <div
                 key={index}
-                className="bg-white rounded-lg shadow-md p-6 sm:p-8 transition-transform hover:scale-105"
+                className="w-full sm:w-72 bg-white rounded-lg shadow-md p-6 sm:p-8 transition-transform hover:scale-102"
               >
                 <div className="icon-wrapper mb-4">
                   {feature.icon}
                 </div>
-                <h3 className="text-lg sm:text-xl md:text-2xl font-semibold mb-3">
+                <h3 className="text-lg sm:text-xl text-center font-semibold mb-3">
                   {feature.title}
                 </h3>
                 <p className="text-sm sm:text-base text-gray-600">
@@ -118,10 +112,10 @@ function TheHomePage() {
 
   const DesignPlotSection = () => {
     return (
-      <section className="py-8 sm:py-12 md:py-16 bg-white">
+      <section className="my-2 py-2 sm:my-4 sm:py-4">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row md:items-center md:space-x-8 lg:space-x-12">
-            <div className="w-full md:w-1/2 mb-6 md:mb-0">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4">
+            <div className="w-full flex-1 mb-4 sm:mb-0">
               <img
                 src={designImage}
                 alt="Design Tool Screenshot"
@@ -129,19 +123,13 @@ function TheHomePage() {
                 loading="lazy"
               />
             </div>
-            <div className="w-full md:w-1/2">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">
+            <div className="w-full flex-1">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2">
                 Plan Your Perfect Plot
               </h2>
-              <p className="text-base sm:text-lg text-gray-700 mb-6">
+              <p className="text-base sm:text-lg text-gray-700">
                 Our user-friendly tool helps you plan and visualize your perfect garden layout, even if you're a complete beginner.
               </p>
-              <Link 
-                to="/design" 
-                className="inline-block px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors text-sm sm:text-base"
-              >
-                Design Your Plot
-              </Link>
             </div>
           </div>
         </div>
@@ -149,53 +137,99 @@ function TheHomePage() {
     );
   };
 
-  const BeginnersGuide = () => {
-    const steps = useMemo(() => [
-      {
-        title: '1. Choose Your Layout',
-        excerpt: 'Select a planting pattern...',
-        image: `${step1Image}`,
-        loading: "lazy"
-      },
-      {
-        title: '2. Enter Your Garden Details',
-        excerpt: 'Input your garden dimensions: width, height, and border width. Then, specify plant diameter and spacing.',
-        image: `${step2Image}`,
-        loading: "lazy"
-      },
-      {
-        title: '3. Get Instant Results',
-        excerpt: 'See real-time calculations, including total plant count and spacing impact. Adjust settings to refine your layout.',
-        image: `${step3Image}`,
-        loading: "lazy"
-      },
-    ], []);
-
+  function BeginnersGuide() {
     return (
-      <section className="py-8">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-4 text-center font-serif">Your Gardening Journey Starts Here</h2>
-          <p className="text-lg mb-8 text-gray-700 text-center">
-            Plan your perfect garden with our easy-to-use Plot Calculator.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {steps.map((step, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-md p-6 flex flex-col h-full">
-                <img
-                  src={step.image}
-                  alt={step.title}
-                  className="mx-auto mb-4 rounded-lg shadow-md max-w-full h-auto"
-                  loading={step.loading}
-                />
-                <h3 className="text-xl font-semibold mb-2 font-serif">{step.title}</h3>
-                <p className="text-gray-700 mb-4 flex-grow">{step.excerpt}</p>
-              </div>
-            ))}
+      <section className="relative my-2 py-2 sm:my-4 sm:py-4">
+
+        <div className={`h-[50vh]`}></div>
+
+        <h2 className=" sticky h-[50vh] top-0 sm:top-8 text-lg sm:text-3xl font-bold text-center font-serif">Your Gardening Journey Starts Here</h2>
+
+        <p className="sticky h-[50vh] top-18 sm:top-20 text-lg text-gray-700 text-center">
+          Plan your perfect garden with our easy-to-use Plot Calculator.
+        </p>
+
+        <div className={`sticky h-screen top-26 left-0 grid grid-cols-10 grid-rows-8 gap-2 p-4`}>
+          <div className=' col-start-2 col-end-4 row-start-1 row-end-3 rounded'>
+            <img src={step1Image} alt="Step1" className='w-full h-full object-contain' />
           </div>
         </div>
-      </section>
+
+        <div className={`sticky h-screen top-0 left-0 right-0 grid grid-cols-10 grid-rows-8 gap-2 p-4`}>
+          <div className=' col-start-2 col-end-4 row-start-3 row-end-8 rounded'>
+            <img src={step2Image} alt="Step2" className='w-full h-full object-contain' />
+          </div>
+        </div>
+
+        <div className={`sticky h-screen top-26 left-0 right-0 grid grid-cols-10 grid-rows-8 gap-2 p-4`}>
+          <div className=' col-start-4 col-end-10 row-start-1 row-end-8 rounded'>
+            <img src={step3Image} alt="Step3" className='w-full h-full object-contain' />
+          </div>
+        </div>
+
+        <div className='h-[50vh]'></div>
+      </section >
     );
   };
+
+  // time out animation version
+  // const BeginnersGuide = () => {
+  //   const [activeStep, setActiveStep] = useState(0);
+  //   const totalSteps = 5;
+
+  //   useEffect(() => {
+  //     const timer = setInterval(() => {
+  //       setActiveStep((prev) => (prev < totalSteps - 1 ? prev + 1 : prev));
+  //     }, 700);
+
+  //     return () => clearInterval(timer);
+  //   }, []);
+
+  //   const getStepStyle = (stepNumber) => {
+  //     const isActive = activeStep >= stepNumber;
+  //     return `transition-all duration-1000 ease-in-out ${isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-full'
+  //       }`;
+  //   };
+
+  //   return (
+  //     <section className="my-2 py-2 sm:my-4 sm:py-4">
+  //       <div className={`h-[50vh]`}></div>
+
+  //       <div className={`sticky top-0 rounded ${getStepStyle(0)}`}>
+  //         <h2 className="text-3xl font-bold text-center font-serif">
+  //           Your Gardening Journey Starts Here
+  //         </h2>
+  //       </div>
+
+  //       <div className={`sticky top-12 rounded ${getStepStyle(1)}`}>
+  //         <p className="text-lg mb-8 text-gray-700 text-center">
+  //           Plan your perfect garden with our easy-to-use Plot Calculator.
+  //         </p>
+  //       </div>
+
+  //       <div className="h-screen relative grid grid-cols-8 grid-rows-5 gap-2 p-4">
+  //         <div className={`sticky top-30 col-start-2 col-end-3 row-start-1 row-end-2 rounded ${getStepStyle(2)}`}>
+  //           <img src={step1Image} alt="Step1" className='w-full h-full object-contain' />
+  //         </div>
+
+
+  //         <div className={`sticky top-30 col-start-2 col-end-3 row-start-1 row-end-5  p-4 rounded ${getStepStyle(3)}`}>
+  //           <img src={step2Image} alt="Step2" className='w-full h-full object-contain' />
+  //         </div>
+
+
+
+  //         <div className={`sticky top-30 col-start-3 col-end-8 row-start-1 row-end-5  p-4 rounded ${getStepStyle(4)}`}>
+  //           <img src={step3Image} alt="Step3" className='w-full h-full object-contain' />
+  //         </div>
+  //       </div>
+  //       <div className='h-[120vh]'></div>
+
+
+
+  //     </section >
+  //   );
+  // };
 
   const LatestBlogPosts = () => {
     const blogPosts = [
@@ -307,18 +341,19 @@ function TheHomePage() {
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Get Your Perfect Garden?</h2>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link
+            <BottomMain to="/design" text={t.startDesigning} />
+            {/* <Link
               to="/design"
               className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded transition duration-300"
             >
               Start Designing Your Plot
-            </Link>
-            <Link
+            </Link> */}
+            {/* <Link
               to="/introduction"
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded transition duration-300"
             >
               Start Growing Your Garden
-            </Link>
+            </Link> */}
           </div>
         </div>
       </section>
@@ -329,7 +364,12 @@ function TheHomePage() {
     return (
       <section className="py-8 bg-emerald-50">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-4">Our Story</h2>
+          <Link to="/about"
+            className="text-4xl font-bold mb-4"
+            onClick={() => window.scrollTo(0, 0)}
+          >
+            Our Story
+          </Link>
           <p className="text-lg text-gray-700 mx-auto">
             We're a team of passionate gardeners and tech enthusiasts who believe that everyone has the potential to grow their own food and create beautiful green spaces. Our mission is to empower both novice and experienced gardeners by providing the tools, resources, and inspiration needed to thrive in their gardening journey.
           </p>
@@ -378,7 +418,7 @@ function TheHomePage() {
         <meta name="description" content="Plan your perfect garden with our easy-to-use tools" />
       </Helmet>
       <ErrorBoundary FallbackComponent={ErrorComponent}>
-        <main className="min-h-screen bg-white">
+        <main className=' bg-white'>
           <HeroSection />
           <FeatureSection />
           <DesignPlotSection />

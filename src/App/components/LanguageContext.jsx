@@ -43,27 +43,6 @@ export const translations = {
     contact: "Contact",
     design: "Design",
     
-    // Design Page
-    designTitle: "Garden Calculator",
-    pattern: "Planting Pattern",
-    square: "Square Grid",
-    triangle: "Triangular Grid",
-    rectangle: "Rectangular Grid",
-    gridWidth: "Grid Width Multiplier",
-    gridHeight: "Grid Height Multiplier",
-    gardenWidth: "Garden Width",
-    gardenHeight: "Garden Height",
-    plantDiameter: "Plant Diameter",
-    plantSpacing: "Plant Spacing",
-    borderWidth: "Border Width",
-    totalArea: "Total Area",
-    plantingArea: "Planting Area",
-    borderArea: "Border Area",
-    plantCount: "Number of Plants",
-    plantsInTriangle: "Plants in Triangle",
-    plantsInSquare: "Plants in Square",
-    dimensions: "Dimensions",
-    
     // Home Page
     homeHeroTitle: "Design Your Garden with Precision",
     homeHeroSubtitle: "Plan your garden layout efficiently with our easy-to-use calculator and visualization tools",
@@ -87,6 +66,41 @@ export const translations = {
     homeStep4Description: "View your optimized garden layout",
     homeCtaTitle: "Ready to Start Planning?",
     homeCtaDescription: "Create your perfect garden layout today with our easy-to-use tools",
+
+
+
+    // Design Page
+    designTitle: "Garden Calculator",
+    pattern: "Planting Pattern",
+    square: "Square Grid",
+    triangle: "Triangular Grid",
+    rectangle: "Rectangular Grid",
+    gridWidth: "Grid Width Multiplier",
+    gridHeight: "Grid Height Multiplier",
+    gridWidthMultiplier: "Grid Width Multiplier",
+    gridHeightMultiplier: "Grid Height Multiplier",
+    gardenWidth: "Garden Width",
+    gardenHeight: "Garden Height",
+    plantDiameter: "Plant Diameter",
+    plantSpacing: "Plant Spacing",
+    borderWidth: "Border Width",
+    totalArea: "Total Area",
+    plantingArea: "Planting Area",
+    borderArea: "Border Area",
+    plantCount: "Number of Plants",
+    plantsInTriangle: "Plants in Triangle",
+    plantsInSquare: "Plants in Square",
+    dimensions: "Dimensions",
+
+    // Blog Page
+    blogSearchPlaceholder: "🔍 Looking for something...",
+    blogClearFilters: "Clear Filters",
+    blogNoArticles: "No articles found!",
+    blogReadMore: "Read More",
+    blogLoadingError: "Error loading articles",
+    blogLoading: "Loading articles...",
+    blogPrevious: "Previous",
+    blogNext: "Next",
     
     // Introduction Page
     introTitle: "Garden Plot Calculator",
@@ -107,15 +121,6 @@ export const translations = {
     introStep3Description: "View your optimized layout and plant count calculations",
     introCtaButton: "Start Designing Your Garden",
     
-    // Blog Page
-    blogSearchPlaceholder: "🔍 Looking for something...",
-    blogClearFilters: "Clear Filters",
-    blogNoArticles: "No articles found!",
-    blogReadMore: "Read More",
-    blogLoadingError: "Error loading articles",
-    blogLoading: "Loading articles...",
-    blogPrevious: "Previous",
-    blogNext: "Next",
   },
   th: {
     // Common
@@ -133,6 +138,8 @@ export const translations = {
     rectangle: "ตารางผืนผ้า",
     gridWidth: "ตัวคูณความกว้างตาราง",
     gridHeight: "ตัวคูณความสูงตาราง",
+    gridWidthMultiplier: "ตัวคูณความกว้างตาราง",
+    gridHeightMultiplier: "ตัวคูณความสูงตาราง",
     gardenWidth: "ความกว้างสวน",
     gardenHeight: "ความสูงสวน",
     plantDiameter: "เส้นผ่านศูนย์กลางต้นไม้",
@@ -145,8 +152,7 @@ export const translations = {
     plantsInTriangle: "จำนวนต้นในแบบสามเหลี่ยม",
     plantsInSquare: "จำนวนต้นในแบบสี่เหลี่ยม",
     dimensions: "ขนาด",
-    gridWidthMultiplier: "ตัวคูณความกว้างตาราง",
-    gridHeightMultiplier: "ตัวคูณความสูงตาราง",
+
     
 
     // Home Page
