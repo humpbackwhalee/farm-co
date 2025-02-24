@@ -7,6 +7,7 @@ import { BsToggleOn, BsToggleOff } from "react-icons/bs";
 import { useTranslation } from '../components/LanguageContext';
 
 const ToggleButton = ({ isOn, onToggle, label }) => {
+  const t = useTranslation();
   return (
     <div className="flex flex-row justify-end items-center gap-2 absolute top-0 left-10">
       <button
@@ -18,7 +19,7 @@ const ToggleButton = ({ isOn, onToggle, label }) => {
           {isOn ? <BsToggleOn className="text-3xl text-green-600" /> : <BsToggleOff className="text-3xl text-gray-400" />}
         </div>
       </button>
-      <div>{isOn ? "Show " : "Hide "} {label}</div>
+      <div>{isOn ? `${t.show}` : `${t.hide}`}{label}</div>
     </div>
   );
 };
@@ -401,14 +402,14 @@ const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
           {showDimensions && (
             <>
               <div className="absolute px-4 bg-white -bottom-8 left-1/2 transform -translate-x-1/2 rounded text-sm font-medium text-black z-10">
-                Width: {dimensions.width.value} {dimensions.width.unit}
+                {t.gardenWidth}: {dimensions.width.value} {dimensions.width.unit}
               </div>
               <div
                 className="absolute -bottom-5 left-1/2 transform -translate-x-1/2 bg-black z-0"
                 style={{ width: `${convertToMeters(dimensions.width.value, dimensions.width.unit) * scale}px`, height: "1px" }}
               />
               <div className="absolute px-4 bg-white -right-20 top-1/2 transform -translate-y-1/2 rotate-90 rounded text-sm font-medium text-black z-10">
-                Height: {dimensions.height.value} {dimensions.height.unit}
+                {t.gardenHeight}: {dimensions.height.value} {dimensions.height.unit}
               </div>
               <div
                 className="absolute inset-y-1/2 -right-6 transform translate-x-1/2 rotate-90 bg-black z-0"
@@ -455,10 +456,27 @@ const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
 
               {showDimensions && results.plantPositions.length >= 1 && (
                 <>
+                  {/* plant space name tag */}
+                  {results.plantPositions.slice(0, 1).map((plant, index) => (
+                    <React.Fragment key={index}>
+                      <div
+                        className="absolute bg-emerald-100 rounded-lg p-1 text-sm font-medium text-black transform -translate-x-1/2"
+                        style={{
+                          left: `${plant.x * scale + (convertToMeters(dimensions.plantDiameter.value, dimensions.plantDiameter.unit) * scale) / 2}px`,
+                          top: `${plant.y * scale - 10}px`,
+                          zIndex: 20
+                        }}
+                      >
+                        {t.plantSpacing}: {dimensions.spacing.value / 2} {dimensions.spacing.unit}
+                      </div>
+                    </React.Fragment>
+                  ))}
+
+                  {/* plant space ring */}
                   {results.plantPositions.slice(0, 2).map((plant, index) => (
                     <React.Fragment key={index}>
                       <div
-                        className="absolute border-2 border-dashed border-black rounded-full"
+                        className="absolute border-1 border-dashed border-black rounded-full"
                         style={{
                           width: `${(convertToMeters(dimensions.plantDiameter.value, dimensions.plantDiameter.unit) + convertToMeters(dimensions.spacing.value, dimensions.spacing.unit) / 2) * scale}px`,
                           height: `${(convertToMeters(dimensions.plantDiameter.value, dimensions.plantDiameter.unit) + convertToMeters(dimensions.spacing.value, dimensions.spacing.unit) / 2) * scale}px`,
@@ -467,16 +485,6 @@ const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
                           zIndex: 10
                         }}
                       />
-                      <div
-                        className="absolute bg-white px-2 text-sm font-medium text-black"
-                        style={{
-                          left: `${plant.x * scale + (convertToMeters(dimensions.plantDiameter.value, dimensions.plantDiameter.unit) * scale) / 2}px`,
-                          top: `${plant.y * scale - 20}px`,
-                          zIndex: 20
-                        }}
-                      >
-                        Spacing: {dimensions.spacing.value / 2} {dimensions.spacing.unit}
-                      </div>
                     </React.Fragment>
                   ))}
                 </>
