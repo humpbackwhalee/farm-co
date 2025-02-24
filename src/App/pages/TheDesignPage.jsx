@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
-
 import { CgArrowsShrinkH, CgArrowsExpandDownRight } from "react-icons/cg";
 import { AiOutlineBorder } from "react-icons/ai";
 import { FaCircle, FaRegDotCircle } from "react-icons/fa";
@@ -7,7 +6,6 @@ import { CgMenuGridO } from "react-icons/cg";
 import { BsToggleOn, BsToggleOff } from "react-icons/bs";
 import { useTranslation } from '../components/LanguageContext';
 
-// ToggleButton Component
 const ToggleButton = ({ isOn, onToggle, label }) => {
   return (
     <div className="flex flex-row justify-end items-center gap-2 absolute top-0 left-10">
@@ -17,37 +15,23 @@ const ToggleButton = ({ isOn, onToggle, label }) => {
         aria-label={isOn ? `Hide ${label}` : `Show ${label}`}
       >
         <div>
-          {isOn ? (
-            <BsToggleOn className="text-3xl text-green-600" />
-          ) : (
-            <BsToggleOff className="text-3xl text-gray-400" />
-          )}
+          {isOn ? <BsToggleOn className="text-3xl text-green-600" /> : <BsToggleOff className="text-3xl text-gray-400" />}
         </div>
       </button>
-      <div className="">
-        {isOn ? "Show " : "Hide "} {label}
-      </div>
-
+      <div>{isOn ? "Show " : "Hide "} {label}</div>
     </div>
   );
 };
 
 function TheDesignPage() {
-  // Add state for toggle
   const [showDimensions, setShowDimensions] = useState(true);
-
-
   return (
     <div className="relative">
-      <PlotCalculator
-        showDimensions={showDimensions}
-        setShowDimensions={setShowDimensions}
-      />
+      <PlotCalculator showDimensions={showDimensions} setShowDimensions={setShowDimensions} />
     </div>
   );
 }
 
-// Calculate plant positions based on selected pattern and grid dimensions
 const calculatePlantPositions = (plotWidth, plotHeight, plantDiameter, spacing, pattern, gridWidth, gridHeight) => {
   switch (pattern) {
     case 'triangle':
@@ -59,182 +43,123 @@ const calculatePlantPositions = (plotWidth, plotHeight, plantDiameter, spacing, 
   }
 };
 
-
-// Calculate positions for square grid pattern (equal spacing in both directions)
 const calculateSquarePattern = (plotWidth, plotHeight, plantDiameter, spacing) => {
-  spacing = spacing / 2; // space are shared with each other
-  // Calculate number of plants that can fit in each direction
-  const numCols = Math.floor((plotWidth) / (plantDiameter + spacing)) || 0;
-  const numRows = Math.floor((plotHeight) / (plantDiameter + spacing)) || 0;
-
-  // Calculate starting positions to center the grid
-  const startX = (plotWidth - (numCols * (plantDiameter + spacing) - spacing)) / 2;
-  const startY = (plotHeight - (numRows * (plantDiameter + spacing) - spacing)) / 2;
+  const adjustedSpacing = spacing / 2;
+  const spacingTotal = plantDiameter + adjustedSpacing;
+  const numCols = Math.floor(plotWidth / spacingTotal) || 0;
+  const numRows = Math.floor(plotHeight / spacingTotal) || 0;
+  const horizontalExtent = numCols > 0 ? (numCols - 1) * spacingTotal + plantDiameter : 0;
+  const verticalExtent = numRows > 0 ? (numRows - 1) * spacingTotal + plantDiameter : 0;
+  const startX = (plotWidth - horizontalExtent) / 2;
+  const startY = (plotHeight - verticalExtent) / 2;
 
   const positions = [];
   for (let row = 0; row < numRows; row++) {
     for (let col = 0; col < numCols; col++) {
       positions.push({
-        x: startX + col * (plantDiameter + (spacing)),
-        y: startY + row * (plantDiameter + (spacing))
+        x: startX + col * spacingTotal,
+        y: startY + row * spacingTotal
       });
     }
   }
   return positions;
 };
 
-// const calculateTriangularPattern = (plotWidth, plotHeight, plantDiameter, spacing, gridWidth, gridHeight) => {
-//   // Adjust spacing for shared space between plants
-//   const adjustedSpacing = spacing / 2;
-
-//   // Base spacing between plant centers
-//   const baseSpacing = plantDiameter + adjustedSpacing;
-
-//   // Horizontal spacing adjusted by grid width multiplier
-//   const horizontalSpacing = baseSpacing * gridWidth;
-
-//   // Vertical spacing uses the 60-degree triangular relationship
-//   // At 60 degrees, the vertical distance is √3/2 times the horizontal distance
-//   const verticalSpacing = (Math.sqrt(3) / 2) * baseSpacing * gridHeight;
-//   console.log(verticalSpacing);
-//   // Calculate number of plants that can fit
-//   const numCols = Math.floor(plotWidth / horizontalSpacing);
-//   const numRows = Math.floor(plotHeight / verticalSpacing);
-
-//   // Center the pattern in the plot
-//   // const startX = (plotWidth - (numCols * horizontalSpacing)) / 2;
-//   const startX = (plotWidth - (numCols * (plantDiameter + adjustedSpacing) - adjustedSpacing)) / 2;
-//   const startY = Math.abs(plotHeight - (numRows * (plantDiameter + adjustedSpacing) - adjustedSpacing)) / 2;
-//   // const startY = plotHeight === 1 ? 0 : (plotHeight - (numRows * verticalSpacing)) / 2;
-//   console.log(numRows * verticalSpacing );
-//   console.log(startX, startY);
-
-//   const positions = [];
-//   for (let row = 0; row < numRows; row++) {
-//     const isOddRow = row % 2 === 1;
-//     const rowOffset = isOddRow ? horizontalSpacing / 2 : 0;
-
-//     // Calculate plants for this row
-//     const effectiveNumCols = isOddRow
-//       ? Math.floor((plotWidth - rowOffset) / horizontalSpacing)
-//       : numCols;
-
-//     console.log(plotWidth/ horizontalSpacing);
-//     // const effectiveNumCols = isOddRow
-//     //   ? Math.floor((plotWidth - rowOffset) / horizontalSpacing)
-//     //   : numCols;
-
-//     console.log(`effectiveNumCols: ${effectiveNumCols}`);
-//     for (let col = 0; col <= effectiveNumCols; col++) {
-//       const x = startX + rowOffset + (col * horizontalSpacing);
-//       const y = startY + (row * verticalSpacing);
-
-//       // Only add position if plant fits within plot bounds
-//       if (x + plantDiameter <= plotWidth && y + plantDiameter <= plotHeight) {
-//         positions.push({ x, y });
-//       }
-//     }
-//   }
-//   return positions;
-// };
-
 const calculateTriangularPattern = (plotWidth, plotHeight, plantDiameter, spacing, gridWidth, gridHeight) => {
-  const adjustedSpacing = spacing / 2; // 0.5m
-  const baseSpacing = plantDiameter + adjustedSpacing; // 1.5m
-  const horizontalSpacing = baseSpacing * gridWidth; // 1.5m
-  const verticalSpacing = (Math.sqrt(3) / 2) * baseSpacing * gridHeight; // 1.299m
+  const adjustedSpacing = spacing / 2;
+  const baseSpacing = plantDiameter + adjustedSpacing;
+  const horizontalSpacing = baseSpacing * gridWidth;
+  const verticalSpacing = (Math.sqrt(3) / 2) * baseSpacing * gridHeight;
 
-  // Horizontal: max plants that fit
-  const numCols = Math.floor((plotWidth + adjustedSpacing) / horizontalSpacing); // 5
-  const horizontalExtent = (numCols - 1) * horizontalSpacing + plantDiameter; // (5-1) * 1.5 + 1 = 7m
-  const startX = (plotWidth - horizontalExtent) / 2; // (7 - 7) / 2 = 0m (but generalizes)
+  const numCols = Math.floor((plotWidth - plantDiameter + adjustedSpacing) / horizontalSpacing) + 1;
+  const maxRows = Math.floor((plotHeight - plantDiameter + adjustedSpacing) / verticalSpacing) + 1;
 
-  // Vertical: max plants that fit, adjusted for actual rows
-  const maxRows = Math.floor((plotHeight + adjustedSpacing) / verticalSpacing); // 8
+  // Initial vertical extent for startY
+  const verticalExtent = (maxRows - 1) * verticalSpacing + plantDiameter;
+  const startYRaw = (plotHeight - verticalExtent) / 2;
+  const startY = Math.max(0, startYRaw);
+
+  // Calculate positions without horizontal centering yet
   const positions = [];
   for (let row = 0; row < maxRows; row++) {
     const isOddRow = row % 2 === 1;
     const rowOffset = isOddRow ? horizontalSpacing / 2 : 0;
-    const effectiveNumCols = isOddRow ? 4 : numCols; // 4 for odd, 5 for even
+    const effectiveNumCols = isOddRow
+      ? Math.floor((plotWidth - rowOffset - plantDiameter + adjustedSpacing) / horizontalSpacing) + 1
+      : numCols;
     for (let col = 0; col < effectiveNumCols; col++) {
-      const x = rowOffset + (col * horizontalSpacing); // Relative to startX
-      const y = row * verticalSpacing; // Relative to startY
+      const x = rowOffset + (col * horizontalSpacing); // No startX yet
+      const y = startY + (row * verticalSpacing);
       if (x + plantDiameter <= plotWidth && y + plantDiameter <= plotHeight) {
         positions.push({ x, y });
       }
     }
   }
+  // Calculate horizontal centering based on actual positions
+  if (positions.length > 0) {
+    const minX = Math.min(...positions.map(pos => pos.x));
+    const maxX = Math.max(...positions.map(pos => pos.x));
+    const actualHorizontalExtent = maxX - minX + plantDiameter; // Full width including last plant
+    const startX = Math.max(0, (plotWidth - actualHorizontalExtent) / 2);
 
-  // Adjust startX and startY to center the actual positions
-  const actualRows = Math.ceil(positions.length / numCols); // 7 rows (32 plants / ~4.5 avg)
-  const verticalExtent = (actualRows - 1) * verticalSpacing + plantDiameter; // (7-1) * 1.299 + 1 = 8.794m
-  const startY = (plotHeight - verticalExtent) / 2; // (10 - 8.794) / 2 = 0.603m
+    const minY = Math.min(...positions.map(pos => pos.y));
+    const maxY = Math.max(...positions.map(pos => pos.y));
+    const actualVerticalExtent = maxY - minY + plantDiameter; // Full height including last plant
+    const startY = Math.max(0, (plotHeight - actualVerticalExtent) / 2);
 
-  // Shift positions to center
-  const centeredPositions = positions.map(pos => ({
-    x: pos.x + startX,
-    y: pos.y + startY
-  }));
-
-  return centeredPositions;
+    // Shift positions to center horizontally
+    return positions.map(pos => ({
+      x: pos.x + startX - minX, // Adjust from minX to center
+      y: pos.y + startY - minY
+    }));
+  }
+  return positions; // Return unshifted if no positions
 };
 
 const calculateRectangularPattern = (plotWidth, plotHeight, plantDiameter, spacing, gridWidth, gridHeight) => {
-  const adjustedSpacing = spacing / 2; // 0.5m (renamed for clarity)
-  // Adjust spacing based on grid dimensions
-  const horizontalSpacing = (plantDiameter + adjustedSpacing) * gridWidth; // 1.5m
-  const verticalSpacing = (plantDiameter + adjustedSpacing) * gridHeight; // 1.5m
+  const adjustedSpacing = spacing / 2;
+  const horizontalSpacing = (plantDiameter + adjustedSpacing) * gridWidth;
+  const verticalSpacing = (plantDiameter + adjustedSpacing) * gridHeight;
 
-  // Calculate number of plants that can fit
-  const numCols = Math.floor(plotWidth / horizontalSpacing) || 0; // 4
-  const numRows = Math.floor(plotHeight / verticalSpacing) || 0; // 6
+  const numCols = Math.floor(plotWidth / horizontalSpacing) || 0;
+  const numRows = Math.floor(plotHeight / verticalSpacing) || 0;
 
-  // Calculate full extent of the grid
-  const horizontalExtent = numCols > 0 ? (numCols - 1) * horizontalSpacing + plantDiameter : 0; // (4-1) * 1.5 + 1 = 5.5m
-  const verticalExtent = numRows > 0 ? (numRows - 1) * verticalSpacing + plantDiameter : 0; // (6-1) * 1.5 + 1 = 8.5m
+  const horizontalExtent = numCols > 0 ? (numCols - 1) * horizontalSpacing + plantDiameter : 0;
+  const verticalExtent = numRows > 0 ? (numRows - 1) * verticalSpacing + plantDiameter : 0;
 
-  // Center the grid
-  const startX = (plotWidth - horizontalExtent) / 2; // (7 - 5.5) / 2 = 0.75m
-  const startY = (plotHeight - verticalExtent) / 2; // (10 - 8.5) / 2 = 0.75m
+  const startX = (plotWidth - horizontalExtent) / 2;
+  const startY = (plotHeight - verticalExtent) / 2;
 
   const positions = [];
   for (let row = 0; row < numRows; row++) {
     for (let col = 0; col < numCols; col++) {
-      const x = startX + col * horizontalSpacing;
-      const y = startY + row * verticalSpacing;
-      positions.push({ x, y });
+      positions.push({ x: startX + col * horizontalSpacing, y: startY + row * verticalSpacing });
     }
   }
   return positions;
 };
 
-// Convert measurements to meters for calculations
 const convertToMeters = (value, unit) => {
   switch (unit) {
-    case 'cm':
-      return value * 0.01;
-    case 'km':
-      return value * 1000;
-    default:
-      return value; // meters
+    case 'cm': return value * 0.01;
+    case 'km': return value * 1000;
+    default: return value; // meters
   }
 };
 
 const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
   const t = useTranslation();
-  // State for all input dimensions and pattern settings
   const [dimensions, setDimensions] = useState({
-    width: { value: 7, unit: 'm' },
-    height: { value: 10, unit: 'm' },
+    width: { value: 9, unit: 'm' },
+    height: { value: 13, unit: 'm' },
     border: { value: 0, unit: 'm' },
-    plantDiameter: { value: 1, unit: 'm' },
+    plantDiameter: { value: 2, unit: 'm' },
     spacing: { value: 1, unit: 'm' },
     pattern: 'triangle',
     gridWidth: 1,
     gridHeight: 1
   });
 
-  // State for calculation results
   const [results, setResults] = useState({
     totalArea: 0,
     plotArea: 0,
@@ -247,104 +172,72 @@ const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
     displayUnit: 'm'
   });
 
-  // Constants for visualization
   const resultSize = window.innerHeight - (window.innerHeight * 0.25);
-
   const scale = dimensions.width.value > 0 && dimensions.height.value > 0
     ? resultSize / Math.max(
       convertToMeters(dimensions.width.value, dimensions.width.unit),
       convertToMeters(dimensions.height.value, dimensions.height.unit),
-      convertToMeters(dimensions.plantDiameter.value, dimensions.plantDiameter.unit) * 2 // Account for plant size
+      convertToMeters(dimensions.plantDiameter.value, dimensions.plantDiameter.unit) * 2
     )
     : 1;
 
   const visualizationRef = useRef(null);
 
-  // Convert measurements to meters
-  const convertedMeasurements = useMemo(() => {
-    return {
-      widthMeters: convertToMeters(dimensions.width.value, dimensions.width.unit),
-      heightMeters: convertToMeters(dimensions.height.value, dimensions.height.unit),
-      borderMeters: convertToMeters(dimensions.border.value, dimensions.border.unit),
-      plantDiameterMeters: convertToMeters(dimensions.plantDiameter.value, dimensions.plantDiameter.unit),
-      spacingMeters: convertToMeters(dimensions.spacing.value, dimensions.spacing.unit),
-    };
-  }, [dimensions]);
+  const convertedMeasurements = useMemo(() => ({
+    widthMeters: convertToMeters(dimensions.width.value, dimensions.width.unit),
+    heightMeters: convertToMeters(dimensions.height.value, dimensions.height.unit),
+    borderMeters: convertToMeters(dimensions.border.value, dimensions.border.unit),
+    plantDiameterMeters: convertToMeters(dimensions.plantDiameter.value, dimensions.plantDiameter.unit),
+    spacingMeters: convertToMeters(dimensions.spacing.value, dimensions.spacing.unit),
+  }), [dimensions]);
 
-  // Calculate plot dimensions
   const plotDimensions = useMemo(() => {
     const { widthMeters, heightMeters, borderMeters } = convertedMeasurements;
-    const plotWidthMeters = Math.max(0, widthMeters - 2 * borderMeters);
-    const plotHeightMeters = Math.max(0, heightMeters - 2 * borderMeters);
-    return { plotWidthMeters, plotHeightMeters };
-  }, [convertedMeasurements]);
-
-  // Memoize positions for each pattern
-  const squarePositions = useMemo(() => {
-    const { plotWidthMeters, plotHeightMeters } = plotDimensions;
-    const { plantDiameterMeters, spacingMeters } = convertedMeasurements;
-    return calculatePlantPositions(
-      plotWidthMeters,
-      plotHeightMeters,
-      plantDiameterMeters,
-      spacingMeters,
-      'square',
-      dimensions.gridWidth,
-      dimensions.gridHeight
-    );
-  }, [plotDimensions, convertedMeasurements, dimensions.gridWidth, dimensions.gridHeight]);
-
-  const trianglePositions = useMemo(() => {
-    const { plotWidthMeters, plotHeightMeters } = plotDimensions;
-    const { plantDiameterMeters, spacingMeters } = convertedMeasurements;
-    return calculatePlantPositions(
-      plotWidthMeters,
-      plotHeightMeters,
-      plantDiameterMeters,
-      spacingMeters,
-      'triangle',
-      dimensions.gridWidth,
-      dimensions.gridHeight
-    );
-  }, [plotDimensions, convertedMeasurements, dimensions.gridWidth, dimensions.gridHeight]);
-
-  const rectanglePositions = useMemo(() => {
-    const { plotWidthMeters, plotHeightMeters } = plotDimensions;
-    const { plantDiameterMeters, spacingMeters } = convertedMeasurements;
-    return calculatePlantPositions(
-      plotWidthMeters,
-      plotHeightMeters,
-      plantDiameterMeters,
-      spacingMeters,
-      'rectangle',
-      dimensions.gridWidth,
-      dimensions.gridHeight
-    );
-  }, [plotDimensions, convertedMeasurements, dimensions.gridWidth, dimensions.gridHeight]);
-
-  // Get current pattern positions
-  const currentPositions = useMemo(() => {
     return {
-      'square': squarePositions,
-      'triangle': trianglePositions,
-      'rectangle': rectanglePositions
-    }[dimensions.pattern];
-  }, [dimensions.pattern, squarePositions, trianglePositions, rectanglePositions]);
-
-  // Calculate areas and update results
-  const totalArea = useMemo(() => {
-    const { widthMeters, heightMeters } = convertedMeasurements;
-    return widthMeters * heightMeters;
+      plotWidthMeters: Math.max(0, widthMeters - 2 * borderMeters),
+      plotHeightMeters: Math.max(0, heightMeters - 2 * borderMeters)
+    };
   }, [convertedMeasurements]);
 
-  const plotArea = useMemo(() => {
-    const { plotWidthMeters, plotHeightMeters } = plotDimensions;
-    return plotWidthMeters * plotHeightMeters;
-  }, [plotDimensions]);
+  const squarePositions = useMemo(() => calculatePlantPositions(
+    plotDimensions.plotWidthMeters,
+    plotDimensions.plotHeightMeters,
+    convertedMeasurements.plantDiameterMeters,
+    convertedMeasurements.spacingMeters,
+    'square',
+    dimensions.gridWidth,
+    dimensions.gridHeight
+  ), [plotDimensions, convertedMeasurements, dimensions.gridWidth, dimensions.gridHeight]);
 
-  const borderArea = useMemo(() => {
-    return Math.abs(totalArea - plotArea);
-  }, [totalArea, plotArea]);
+  const trianglePositions = useMemo(() => calculatePlantPositions(
+    plotDimensions.plotWidthMeters,
+    plotDimensions.plotHeightMeters,
+    convertedMeasurements.plantDiameterMeters,
+    convertedMeasurements.spacingMeters,
+    'triangle',
+    dimensions.gridWidth,
+    dimensions.gridHeight
+  ), [plotDimensions, convertedMeasurements, dimensions.gridWidth, dimensions.gridHeight]);
+
+  const rectanglePositions = useMemo(() => calculatePlantPositions(
+    plotDimensions.plotWidthMeters,
+    plotDimensions.plotHeightMeters,
+    convertedMeasurements.plantDiameterMeters,
+    convertedMeasurements.spacingMeters,
+    'rectangle',
+    dimensions.gridWidth,
+    dimensions.gridHeight
+  ), [plotDimensions, convertedMeasurements, dimensions.gridWidth, dimensions.gridHeight]);
+
+  const currentPositions = useMemo(() => ({
+    'square': squarePositions,
+    'triangle': trianglePositions,
+    'rectangle': rectanglePositions
+  }[dimensions.pattern]), [dimensions.pattern, squarePositions, trianglePositions, rectanglePositions]);
+
+  const totalArea = useMemo(() => convertedMeasurements.widthMeters * convertedMeasurements.heightMeters, [convertedMeasurements]);
+  const plotArea = useMemo(() => plotDimensions.plotWidthMeters * plotDimensions.plotHeightMeters, [plotDimensions]);
+  const borderArea = useMemo(() => Math.abs(totalArea - plotArea), [totalArea, plotArea]);
 
   useEffect(() => {
     setResults({
@@ -358,48 +251,26 @@ const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
       plantPositions: currentPositions,
       displayUnit: 'm'
     });
-  }, [
-    totalArea,
-    plotArea,
-    borderArea,
-    currentPositions,
-    squarePositions,
-    trianglePositions,
-    rectanglePositions
-  ]);
+  }, [totalArea, plotArea, borderArea, currentPositions, squarePositions, trianglePositions, rectanglePositions]);
 
-  // Add to the handleDimensionChange function
   const handleDimensionChange = (field, value, unit) => {
     const newValue = parseFloat(value);
     if (isNaN(newValue) || newValue < 0) return;
-
-    // Validate plant diameter and spacing
     if (field === 'plantDiameter' || field === 'spacing') {
       const totalWidth = convertToMeters(dimensions.width.value, dimensions.width.unit);
       const totalHeight = convertToMeters(dimensions.height.value, dimensions.height.unit);
-      if (convertToMeters(newValue, unit) > Math.min(totalWidth, totalHeight)) {
-        return; // Don't update if plant is bigger than plot
-      }
+      if (convertToMeters(newValue, unit) > Math.min(totalWidth, totalHeight)) return;
     }
-
     setDimensions(prev => ({
       ...prev,
-      [field]: {
-        value: newValue,
-        unit: unit || prev[field].unit
-      }
+      [field]: { value: newValue, unit: unit || prev[field].unit }
     }));
   };
 
-  // Handle changes to pattern selection
   const handlePatternChange = (event) => {
-    setDimensions(prev => ({
-      ...prev,
-      pattern: event.target.value
-    }));
+    setDimensions(prev => ({ ...prev, pattern: event.target.value }));
   };
 
-  // Handle changes to grid dimensions
   const handleGridChange = (field, value) => {
     setDimensions(prev => ({
       ...prev,
@@ -407,7 +278,6 @@ const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
     }));
   };
 
-  // Component for dimension inputs
   const DimensionInput = ({ label, field, sign }) => (
     <div className="w-full space-y-2">
       <label className="flex flex-row items-center px-2 gap-2 text-sm font-medium text-gray-700">{label} {sign}</label>
@@ -432,25 +302,17 @@ const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
     </div>
   );
 
-
-
   return (
     <div className="min-h-screen flex flex-col sm:flex-row justify-center font-poppins text-base bg-mainBG-light shadow-inner">
 
-      {/* Input form */}
-      <div className="w-full mx-4 my-8 sm:max-w-1/4 p-2 sm:p-4 sm:my-4 bg-white rounded-lg shadow-xl ">
+      {/* Input Section */}
+      <div className="w-full mx-4 my-8 sm:max-w-1/4 p-2 sm:p-4 sm:my-4 bg-white rounded-lg shadow-xl">
         <div>
-          <p className="text-2xl pt-4 text-center">
-            {t.designTitle}</p>
+          <p className="text-2xl pt-4 text-center">{t.designTitle}</p>
         </div>
-
         <div className="p-4 space-y-4">
-          {/* Pattern selection */}
           <label className="flex flex-row justify-between px-2 text-sm font-medium text-gray-700">
-            {t.pattern}:
-            <CgMenuGridO
-              className={`text-lg ${dimensions.pattern !== 'square' ? 'rotate-45' : ''}`}
-            />
+            {t.pattern}: <CgMenuGridO className={`text-lg ${dimensions.pattern !== 'square' ? 'rotate-45' : ''}`} />
           </label>
           <select
             value={dimensions.pattern}
@@ -462,12 +324,12 @@ const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
             <option value="rectangle">{t.rectangle}</option>
           </select>
 
-          {/* Grid pattern adjustments */}
           {dimensions.pattern !== 'square' && (
             <div className="space-y-4">
               <div className="space-y-2">
-                <label className="flex flex-row items-center px-2 text-sm font-medium text-gray-700">{t.gridWidthMultiplier}
-                  <CgArrowsExpandDownRight className="text-lg ml-2 -rotate-45" /> </label>
+                <label className="flex flex-row items-center px-2 text-sm font-medium text-gray-700">
+                  {t.gridWidthMultiplier} <CgArrowsExpandDownRight className="text-lg ml-2 -rotate-45" />
+                </label>
                 <input
                   type="number"
                   value={dimensions.gridWidth}
@@ -479,8 +341,8 @@ const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
                 />
               </div>
               <div className="space-y-2">
-                <label className="flex flex-row items-center px-2 text-sm font-medium text-gray-700">{t.gridHeightMultiplier}
-                  <CgArrowsExpandDownRight className="text-lg ml-2 -rotate-135" />
+                <label className="flex flex-row items-center px-2 text-sm font-medium text-gray-700">
+                  {t.gridHeightMultiplier} <CgArrowsExpandDownRight className="text-lg ml-2 -rotate-135" />
                 </label>
                 <input
                   type="number"
@@ -495,14 +357,12 @@ const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
             </div>
           )}
 
-          {/* Dimension inputs */}
           <DimensionInput label={t.gardenWidth} field="width" sign={<CgArrowsShrinkH className="text-lg" />} />
           <DimensionInput label={t.gardenHeight} field="height" sign={<CgArrowsShrinkH className="text-lg rotate-90" />} />
           <DimensionInput label={t.plantDiameter} field="plantDiameter" sign={<FaCircle className="text-sm" />} />
           <DimensionInput label={t.plantSpacing} field="spacing" sign={<FaRegDotCircle className="text-lg" />} />
           <DimensionInput label={t.borderWidth} field="border" sign={<AiOutlineBorder className="text-lg" />} />
 
-          {/* Results display */}
           <div className="mt-6 p-4 bg-mainBG-light rounded-lg drop-shadow-sm space-y-2">
             <p className="text-sm text-gray-600">{t.totalArea}: <span className="font-medium text-gray-900">{results.totalArea.toFixed(2)} m²</span></p>
             <p className="text-sm text-gray-600">{t.plantingArea}: <span className="font-medium text-gray-900">{results.plotArea.toFixed(2)} m²</span></p>
@@ -526,133 +386,101 @@ const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
         </div>
       </div>
 
-      {/* Visualization */}
+      {/* Visualization Section */}
       <div className="relative mx-4 my-4 py-12 px-12 bg-white rounded-lg shadow-xl">
-        {/* Toggle Button */}
         <ToggleButton
           isOn={showDimensions}
           onToggle={() => setShowDimensions(!showDimensions)}
           label={t.dimensions}
         />
-        {/* Container for the Area (Area > Border > Plot) */}
         <div
           className="relative flex justify-center items-center bg-white rounded-lg"
           style={{ width: `${resultSize}px`, height: `${resultSize}px` }}
           ref={visualizationRef}
         >
-          {/* Dimensions Display */}
           {showDimensions && (
             <>
-              {/* Width Dimension */}
               <div className="absolute px-4 bg-white -bottom-8 left-1/2 transform -translate-x-1/2 rounded text-sm font-medium text-black z-10">
                 Width: {dimensions.width.value} {dimensions.width.unit}
               </div>
               <div
                 className="absolute -bottom-5 left-1/2 transform -translate-x-1/2 bg-black z-0"
-                style={{
-                  width: `${convertToMeters(dimensions.width.value, dimensions.width.unit) * scale}px`,
-                  height: "1px",
-                }}
+                style={{ width: `${convertToMeters(dimensions.width.value, dimensions.width.unit) * scale}px`, height: "1px" }}
               />
-
-              {/* Height Dimension */}
               <div className="absolute px-4 bg-white -right-20 top-1/2 transform -translate-y-1/2 rotate-90 rounded text-sm font-medium text-black z-10">
                 Height: {dimensions.height.value} {dimensions.height.unit}
               </div>
               <div
                 className="absolute inset-y-1/2 -right-6 transform translate-x-1/2 rotate-90 bg-black z-0"
-                style={{
-                  width: `${convertToMeters(dimensions.height.value, dimensions.height.unit) * scale}px`,
-                  height: "1px",
-                }}
+                style={{ width: `${convertToMeters(dimensions.height.value, dimensions.height.unit) * scale}px`, height: "1px" }}
               />
-
-              {/* Border Dimension */}
               <div
                 className="absolute -top-4 right-0 bg-black flex items-center z-30"
-                style={{
-                  width: `${Math.max(1, convertToMeters(dimensions.border.value, dimensions.border.unit) * scale)}px`,
-                  height: "1px",
-                }}
-              ></div>
-
-              <div>
-                {dimensions.border.value !== 0 && (
-                  <p
-                    className="absolute -top-10 -right-0 z-30 text-sm font-medium text-black pl-10"
-                  >
-                    Border: {dimensions.border.value / 2} {dimensions.border.unit}
-                  </p>
-                )}
-              </div>
-
+                style={{ width: `${Math.max(1, convertToMeters(dimensions.border.value, dimensions.border.unit) * scale)}px`, height: "1px" }}
+              />
+              {dimensions.border.value !== 0 && (
+                <p className="absolute -top-10 -right-0 z-30 text-sm font-medium text-black pl-10">
+                  Border: {dimensions.border.value / 2} {dimensions.border.unit}
+                </p>
+              )}
             </>
           )}
 
-          {/* Border (Area - plot) */}
           <div
             className="absolute flex justify-center items-center bg-sky-100"
             style={{
               width: `${convertToMeters(dimensions.width.value, dimensions.width.unit) * scale}px`,
-              height: `${convertToMeters(dimensions.height.value, dimensions.height.unit) * scale}px`,
+              height: `${convertToMeters(dimensions.height.value, dimensions.height.unit) * scale}px`
             }}
           >
-
-
             <div
               className="absolute bg-emerald-200 flex justify-center items-center"
               style={{
                 width: `${(convertToMeters(dimensions.width.value, dimensions.width.unit) - 2 * convertToMeters(dimensions.border.value, dimensions.border.unit)) * scale}px`,
-                height: `${(convertToMeters(dimensions.height.value, dimensions.height.unit) - 2 * convertToMeters(dimensions.border.value, dimensions.border.unit)) * scale}px`,
+                height: `${(convertToMeters(dimensions.height.value, dimensions.height.unit) - 2 * convertToMeters(dimensions.border.value, dimensions.border.unit)) * scale}px`
               }}
             >
-              <div className=''>
-                {console.log(results.plantPositions)}
-                {/* Plants (dots) */}
-                {results.plantPositions.map((plant, index) => (
-                  <div
-                    key={index}
-                    className="absolute rounded-full bg-green-500 transition-all duration-300 hover:bg-green-600"
-                    style={{
-                      width: `${convertToMeters(dimensions.plantDiameter.value, dimensions.plantDiameter.unit) * scale}px`,
-                      height: `${convertToMeters(dimensions.plantDiameter.value, dimensions.plantDiameter.unit) * scale}px`,
-                      left: `${plant.x * scale}px`,
-                      top: `${plant.y * scale}px`,
-                    }}
-                  />
-                ))}
+              {results.plantPositions.map((plant, index) => (
+                <div
+                  key={index}
+                  className="absolute rounded-full bg-green-500 transition-all duration-300 hover:bg-green-600"
+                  style={{
+                    width: `${convertToMeters(dimensions.plantDiameter.value, dimensions.plantDiameter.unit) * scale}px`,
+                    height: `${convertToMeters(dimensions.plantDiameter.value, dimensions.plantDiameter.unit) * scale}px`,
+                    left: `${plant.x * scale}px`,
+                    top: `${plant.y * scale}px`
+                  }}
+                />
+              ))}
 
-                {/* Spacing Rings for 1st and 2nd Plants - Toggleable, with spacing / 2 */}
-                {showDimensions && results.plantPositions.length >= 1 && (
-                  <>
-                    {results.plantPositions.slice(0, 6).map((plant, index) => (
-                      <React.Fragment key={index}>
-                        <div
-                          className="absolute border-2 border-dashed border-black rounded-full"
-                          style={{
-                            width: `${(convertToMeters(dimensions.plantDiameter.value, dimensions.plantDiameter.unit) + convertToMeters(dimensions.spacing.value, dimensions.spacing.unit) / 2) * scale}px`,
-                            height: `${(convertToMeters(dimensions.plantDiameter.value, dimensions.plantDiameter.unit) + convertToMeters(dimensions.spacing.value, dimensions.spacing.unit) / 2) * scale}px`,
-                            left: `${plant.x * scale - (convertToMeters(dimensions.spacing.value, dimensions.spacing.unit) * scale) / 4}px`,
-                            top: `${plant.y * scale - (convertToMeters(dimensions.spacing.value, dimensions.spacing.unit) * scale) / 4}px`,
-                            zIndex: 10,
-                          }}
-                        />
-                        <div
-                          className="absolute bg-white px-2 text-sm font-medium text-black"
-                          style={{
-                            left: `${plant.x * scale + (convertToMeters(dimensions.plantDiameter.value, dimensions.plantDiameter.unit) * scale) / 2}px`,
-                            top: `${plant.y * scale - 20}px`, // Moved above the ring
-                            zIndex: 20,
-                          }}
-                        >
-                          Spacing: {dimensions.spacing.value / 2} {dimensions.spacing.unit}
-                        </div>
-                      </React.Fragment>
-                    ))}
-                  </>
-                )}
-              </div>
-
+              {showDimensions && results.plantPositions.length >= 1 && (
+                <>
+                  {results.plantPositions.slice(0, 2).map((plant, index) => (
+                    <React.Fragment key={index}>
+                      <div
+                        className="absolute border-2 border-dashed border-black rounded-full"
+                        style={{
+                          width: `${(convertToMeters(dimensions.plantDiameter.value, dimensions.plantDiameter.unit) + convertToMeters(dimensions.spacing.value, dimensions.spacing.unit) / 2) * scale}px`,
+                          height: `${(convertToMeters(dimensions.plantDiameter.value, dimensions.plantDiameter.unit) + convertToMeters(dimensions.spacing.value, dimensions.spacing.unit) / 2) * scale}px`,
+                          left: `${plant.x * scale - (convertToMeters(dimensions.spacing.value, dimensions.spacing.unit) * scale) / 4}px`,
+                          top: `${plant.y * scale - (convertToMeters(dimensions.spacing.value, dimensions.spacing.unit) * scale) / 4}px`,
+                          zIndex: 10
+                        }}
+                      />
+                      <div
+                        className="absolute bg-white px-2 text-sm font-medium text-black"
+                        style={{
+                          left: `${plant.x * scale + (convertToMeters(dimensions.plantDiameter.value, dimensions.plantDiameter.unit) * scale) / 2}px`,
+                          top: `${plant.y * scale - 20}px`,
+                          zIndex: 20
+                        }}
+                      >
+                        Spacing: {dimensions.spacing.value / 2} {dimensions.spacing.unit}
+                      </div>
+                    </React.Fragment>
+                  ))}
+                </>
+              )}
             </div>
           </div>
         </div>
