@@ -80,79 +80,129 @@ const calculateSquarePattern = (plotWidth, plotHeight, plantDiameter, spacing) =
       });
     }
   }
-
   return positions;
 };
 
+// const calculateTriangularPattern = (plotWidth, plotHeight, plantDiameter, spacing, gridWidth, gridHeight) => {
+//   // Adjust spacing for shared space between plants
+//   const adjustedSpacing = spacing / 2;
+
+//   // Base spacing between plant centers
+//   const baseSpacing = plantDiameter + adjustedSpacing;
+
+//   // Horizontal spacing adjusted by grid width multiplier
+//   const horizontalSpacing = baseSpacing * gridWidth;
+
+//   // Vertical spacing uses the 60-degree triangular relationship
+//   // At 60 degrees, the vertical distance is √3/2 times the horizontal distance
+//   const verticalSpacing = (Math.sqrt(3) / 2) * baseSpacing * gridHeight;
+//   console.log(verticalSpacing);
+//   // Calculate number of plants that can fit
+//   const numCols = Math.floor(plotWidth / horizontalSpacing);
+//   const numRows = Math.floor(plotHeight / verticalSpacing);
+
+//   // Center the pattern in the plot
+//   // const startX = (plotWidth - (numCols * horizontalSpacing)) / 2;
+//   const startX = (plotWidth - (numCols * (plantDiameter + adjustedSpacing) - adjustedSpacing)) / 2;
+//   const startY = Math.abs(plotHeight - (numRows * (plantDiameter + adjustedSpacing) - adjustedSpacing)) / 2;
+//   // const startY = plotHeight === 1 ? 0 : (plotHeight - (numRows * verticalSpacing)) / 2;
+//   console.log(numRows * verticalSpacing );
+//   console.log(startX, startY);
+
+//   const positions = [];
+//   for (let row = 0; row < numRows; row++) {
+//     const isOddRow = row % 2 === 1;
+//     const rowOffset = isOddRow ? horizontalSpacing / 2 : 0;
+
+//     // Calculate plants for this row
+//     const effectiveNumCols = isOddRow
+//       ? Math.floor((plotWidth - rowOffset) / horizontalSpacing)
+//       : numCols;
+
+//     console.log(plotWidth/ horizontalSpacing);
+//     // const effectiveNumCols = isOddRow
+//     //   ? Math.floor((plotWidth - rowOffset) / horizontalSpacing)
+//     //   : numCols;
+
+//     console.log(`effectiveNumCols: ${effectiveNumCols}`);
+//     for (let col = 0; col <= effectiveNumCols; col++) {
+//       const x = startX + rowOffset + (col * horizontalSpacing);
+//       const y = startY + (row * verticalSpacing);
+
+//       // Only add position if plant fits within plot bounds
+//       if (x + plantDiameter <= plotWidth && y + plantDiameter <= plotHeight) {
+//         positions.push({ x, y });
+//       }
+//     }
+//   }
+//   return positions;
+// };
+
 const calculateTriangularPattern = (plotWidth, plotHeight, plantDiameter, spacing, gridWidth, gridHeight) => {
-  // Adjust spacing for shared space between plants
-  const adjustedSpacing = spacing / 2;
+  const adjustedSpacing = spacing / 2; // 0.5m
+  const baseSpacing = plantDiameter + adjustedSpacing; // 1.5m
+  const horizontalSpacing = baseSpacing * gridWidth; // 1.5m
+  const verticalSpacing = (Math.sqrt(3) / 2) * baseSpacing * gridHeight; // 1.299m
 
-  // Base spacing between plant centers
-  const baseSpacing = plantDiameter + adjustedSpacing;
+  // Horizontal: max plants that fit
+  const numCols = Math.floor((plotWidth + adjustedSpacing) / horizontalSpacing); // 5
+  const horizontalExtent = (numCols - 1) * horizontalSpacing + plantDiameter; // (5-1) * 1.5 + 1 = 7m
+  const startX = (plotWidth - horizontalExtent) / 2; // (7 - 7) / 2 = 0m (but generalizes)
 
-  // Horizontal spacing adjusted by grid width multiplier
-  const horizontalSpacing = baseSpacing * gridWidth;
-
-  // Vertical spacing uses the 60-degree triangular relationship
-  // At 60 degrees, the vertical distance is √3/2 times the horizontal distance
-  const verticalSpacing = (Math.sqrt(3) / 2) * baseSpacing * gridHeight;
-
-  // Calculate number of plants that can fit
-  const numCols = Math.floor(plotWidth / horizontalSpacing);
-  const numRows = Math.floor(plotHeight / verticalSpacing);
-
-  // Center the pattern in the plot
-  const startX = (plotWidth - (numCols * horizontalSpacing)) / 2;
-  const startY = plotHeight === 1 ? 0 : (plotHeight - (numRows * verticalSpacing)) / 2;
-  console.log(numRows * verticalSpacing);
-  console.log(startX, startY);
-
+  // Vertical: max plants that fit, adjusted for actual rows
+  const maxRows = Math.floor((plotHeight + adjustedSpacing) / verticalSpacing); // 8
   const positions = [];
-  for (let row = 0; row < numRows; row++) {
+  for (let row = 0; row < maxRows; row++) {
     const isOddRow = row % 2 === 1;
     const rowOffset = isOddRow ? horizontalSpacing / 2 : 0;
-
-    // Calculate plants for this row
-    const effectiveNumCols = isOddRow
-      ? Math.floor((plotWidth - rowOffset) / horizontalSpacing)
-      : numCols;
-
+    const effectiveNumCols = isOddRow ? 4 : numCols; // 4 for odd, 5 for even
     for (let col = 0; col < effectiveNumCols; col++) {
-      const x = startX + rowOffset + (col * horizontalSpacing);
-      const y = startY + (row * verticalSpacing);
-
-      // Only add position if plant fits within plot bounds
+      const x = rowOffset + (col * horizontalSpacing); // Relative to startX
+      const y = row * verticalSpacing; // Relative to startY
       if (x + plantDiameter <= plotWidth && y + plantDiameter <= plotHeight) {
         positions.push({ x, y });
       }
     }
   }
-  console.log(positions);
-  return positions;
+
+  // Adjust startX and startY to center the actual positions
+  const actualRows = Math.ceil(positions.length / numCols); // 7 rows (32 plants / ~4.5 avg)
+  const verticalExtent = (actualRows - 1) * verticalSpacing + plantDiameter; // (7-1) * 1.299 + 1 = 8.794m
+  const startY = (plotHeight - verticalExtent) / 2; // (10 - 8.794) / 2 = 0.603m
+
+  // Shift positions to center
+  const centeredPositions = positions.map(pos => ({
+    x: pos.x + startX,
+    y: pos.y + startY
+  }));
+
+  return centeredPositions;
 };
 
 const calculateRectangularPattern = (plotWidth, plotHeight, plantDiameter, spacing, gridWidth, gridHeight) => {
-  spacing = spacing / 2;
+  const adjustedSpacing = spacing / 2; // 0.5m (renamed for clarity)
   // Adjust spacing based on grid dimensions
-  const horizontalSpacing = (plantDiameter + spacing) * gridWidth;
-  const verticalSpacing = (plantDiameter + spacing) * gridHeight;
+  const horizontalSpacing = (plantDiameter + adjustedSpacing) * gridWidth; // 1.5m
+  const verticalSpacing = (plantDiameter + adjustedSpacing) * gridHeight; // 1.5m
 
   // Calculate number of plants that can fit
-  const numCols = Math.floor((plotWidth) / horizontalSpacing) || 0;
-  const numRows = Math.floor((plotHeight) / verticalSpacing) || 0;
+  const numCols = Math.floor(plotWidth / horizontalSpacing) || 0; // 4
+  const numRows = Math.floor(plotHeight / verticalSpacing) || 0; // 6
+
+  // Calculate full extent of the grid
+  const horizontalExtent = numCols > 0 ? (numCols - 1) * horizontalSpacing + plantDiameter : 0; // (4-1) * 1.5 + 1 = 5.5m
+  const verticalExtent = numRows > 0 ? (numRows - 1) * verticalSpacing + plantDiameter : 0; // (6-1) * 1.5 + 1 = 8.5m
 
   // Center the grid
-  const startX = (plotWidth - (numCols * horizontalSpacing - spacing)) / 2;
-  const startY = (plotHeight - (numRows * verticalSpacing - spacing)) / 2;
+  const startX = (plotWidth - horizontalExtent) / 2; // (7 - 5.5) / 2 = 0.75m
+  const startY = (plotHeight - verticalExtent) / 2; // (10 - 8.5) / 2 = 0.75m
 
   const positions = [];
   for (let row = 0; row < numRows; row++) {
     for (let col = 0; col < numCols; col++) {
-      positions.push({
-        x: startX + col * horizontalSpacing,
-        y: startY + row * verticalSpacing
-      });
+      const x = startX + col * horizontalSpacing;
+      const y = startY + row * verticalSpacing;
+      positions.push({ x, y });
     }
   }
   return positions;
@@ -174,11 +224,11 @@ const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
   const t = useTranslation();
   // State for all input dimensions and pattern settings
   const [dimensions, setDimensions] = useState({
-    width: { value: 3, unit: 'm' },
-    height: { value: 3, unit: 'm' },
+    width: { value: 7, unit: 'm' },
+    height: { value: 10, unit: 'm' },
     border: { value: 0, unit: 'm' },
     plantDiameter: { value: 1, unit: 'm' },
-    spacing: { value: 0, unit: 'm' },
+    spacing: { value: 1, unit: 'm' },
     pattern: 'triangle',
     gridWidth: 1,
     gridHeight: 1
@@ -548,7 +598,7 @@ const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
             }}
           >
 
-            {/* Plot (Area - border) */}
+
             <div
               className="absolute bg-emerald-200 flex justify-center items-center"
               style={{
@@ -556,7 +606,8 @@ const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
                 height: `${(convertToMeters(dimensions.height.value, dimensions.height.unit) - 2 * convertToMeters(dimensions.border.value, dimensions.border.unit)) * scale}px`,
               }}
             >
-              <div>
+              <div className=''>
+                {console.log(results.plantPositions)}
                 {/* Plants (dots) */}
                 {results.plantPositions.map((plant, index) => (
                   <div
@@ -571,42 +622,37 @@ const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
                   />
                 ))}
 
-                {/* Spacing Line between 1st and 2nd Plant - Toggleable */}
-                {results.plantPositions.length >= 2 && showDimensions && (
+                {/* Spacing Rings for 1st and 2nd Plants - Toggleable, with spacing / 2 */}
+                {showDimensions && results.plantPositions.length >= 1 && (
                   <>
-                    <div
-                      className="absolute bg-black"
-                      style={{
-                        width: `${Math.sqrt(
-                          Math.pow((results.plantPositions[1].x - results.plantPositions[0].x) * scale, 2) +
-                          Math.pow((results.plantPositions[1].y - results.plantPositions[0].y) * scale, 2)
-                        )}px`,
-                        height: "2px",
-                        left: `${results.plantPositions[0].x * scale + (convertToMeters(dimensions.plantDiameter.value, dimensions.plantDiameter.unit) * scale) / 2}px`,
-                        top: `${results.plantPositions[0].y * scale + (convertToMeters(dimensions.plantDiameter.value, dimensions.plantDiameter.unit) * scale) / 2}px`,
-                        transform: `rotate(${Math.atan2(
-                          (results.plantPositions[1].y - results.plantPositions[0].y) * scale,
-                          (results.plantPositions[1].x - results.plantPositions[0].x) * scale
-                        ) * (180 / Math.PI)}deg)`,
-                        transformOrigin: "0 0",
-                        zIndex: 10,
-                      }}
-                    />
-                    {/* Spacing Label */}
-                    <div
-                      className="absolute bg-white px-2 text-sm font-medium text-black"
-                      style={{
-                        left: `${(results.plantPositions[0].x + results.plantPositions[1].x) * scale / 2}px`,
-                        top: `${(results.plantPositions[0].y + results.plantPositions[1].y) * scale / 2 - 10}px`,
-                        zIndex: 20,
-                      }}
-                    >
-                      Plant Spacing: {dimensions.spacing.value} {dimensions.spacing.unit}
-                    </div>
+                    {results.plantPositions.slice(0, 6).map((plant, index) => (
+                      <React.Fragment key={index}>
+                        <div
+                          className="absolute border-2 border-dashed border-black rounded-full"
+                          style={{
+                            width: `${(convertToMeters(dimensions.plantDiameter.value, dimensions.plantDiameter.unit) + convertToMeters(dimensions.spacing.value, dimensions.spacing.unit) / 2) * scale}px`,
+                            height: `${(convertToMeters(dimensions.plantDiameter.value, dimensions.plantDiameter.unit) + convertToMeters(dimensions.spacing.value, dimensions.spacing.unit) / 2) * scale}px`,
+                            left: `${plant.x * scale - (convertToMeters(dimensions.spacing.value, dimensions.spacing.unit) * scale) / 4}px`,
+                            top: `${plant.y * scale - (convertToMeters(dimensions.spacing.value, dimensions.spacing.unit) * scale) / 4}px`,
+                            zIndex: 10,
+                          }}
+                        />
+                        <div
+                          className="absolute bg-white px-2 text-sm font-medium text-black"
+                          style={{
+                            left: `${plant.x * scale + (convertToMeters(dimensions.plantDiameter.value, dimensions.plantDiameter.unit) * scale) / 2}px`,
+                            top: `${plant.y * scale - 20}px`, // Moved above the ring
+                            zIndex: 20,
+                          }}
+                        >
+                          Spacing: {dimensions.spacing.value / 2} {dimensions.spacing.unit}
+                        </div>
+                      </React.Fragment>
+                    ))}
                   </>
                 )}
-
               </div>
+
             </div>
           </div>
         </div>
