@@ -69,18 +69,18 @@ function TheHomePage() {
     const features = useMemo(() => [
       {
         icon: <FaSlidersH className="h-12 w-12 mx-auto mb-4 text-blue-600" />,
-        title: 'Calculate Planting Area',
-        description: 'Accurately determines the plantable space in your garden.',
+        title: `${t.homeFeature1Title}`,
+        description: `${t.homeFeature1Description}`,
       },
       {
         icon: <FaRulerCombined className="h-12 w-12 mx-auto mb-4 text-blue-600" />,
-        title: 'Optimize Plant Spacing',
-        description: 'Helps you determine the optimal spacing between plants based on their size and your chosen layout. Proper spacing ensures healthy growth and prevents overcrowding.',
+        title: `${t.homeFeature2Title}`,
+        description: `${t.homeFeature2Description}`,
       },
       {
         icon: <SlScreenDesktop className="h-12 w-12 mx-auto mb-4 text-blue-600" />,
-        title: 'Visualize Your Garden',
-        description: 'Provides a visual representation of your garden layout, showing the placement of plants based on your chosen settings. This allows you to see how your garden will look and make adjustments as needed.',
+        title: `${t.homeFeature3Title}`,
+        description: `${t.homeFeature3Description}`,
       },
     ], []);
 
@@ -128,7 +128,7 @@ function TheHomePage() {
                 Plan Your Perfect Plot
               </h2>
               <p className="text-base sm:text-lg text-gray-700">
-                Our user-friendly tool helps you plan and visualize your perfect garden layout, even if you're a complete beginner.
+                Our user-friendly tool makes it easy to plan and visualize your ideal garden layout, whether you're an experienced gardener or a complete beginner. With this intuitive platform, you can explore various garden designs, plant arrangements, and spacing options to ensure everything fits perfectly. Simply choose your preferred layout, add your plants, and see how they’ll grow together. The tool helps you avoid overcrowding and poor spacing, making it easy to create a healthy and thriving garden. No matter your experience level, you’ll be able to design a beautiful, functional garden that reflects your unique style!
               </p>
             </div>
           </div>
