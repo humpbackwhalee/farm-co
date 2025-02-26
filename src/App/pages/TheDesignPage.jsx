@@ -5,30 +5,15 @@ import { FaCircle, FaRegDotCircle } from "react-icons/fa";
 import { CgMenuGridO } from "react-icons/cg";
 import { BsToggleOn, BsToggleOff } from "react-icons/bs";
 import { useTranslation } from '../components/LanguageContext';
+import FeedbackBox from "../components/FeedbackBox";
 
-const ToggleButton = ({ isOn, onToggle, label }) => {
-  const t = useTranslation();
-  return (
-    <div className="flex flex-row justify-end items-center gap-2 absolute top-0 left-10">
-      <button
-        onClick={onToggle}
-        className="py-1 px-2 rounded-lg text-gray-700 z-20"
-        aria-label={isOn ? `Hide ${label}` : `Show ${label}`}
-      >
-        <div>
-          {isOn ? <BsToggleOn className="text-3xl text-green-600" /> : <BsToggleOff className="text-3xl text-gray-400" />}
-        </div>
-      </button>
-      <div>{isOn ? `${t.show}` : `${t.hide}`}{label}</div>
-    </div>
-  );
-};
 
 function TheDesignPage() {
   const [showDimensions, setShowDimensions] = useState(true);
   return (
     <div className="relative">
       <PlotCalculator showDimensions={showDimensions} setShowDimensions={setShowDimensions} />
+      <FeedbackBox />
     </div>
   );
 }
@@ -148,13 +133,31 @@ const convertToMeters = (value, unit) => {
   }
 };
 
+const ToggleButton = ({ isOn, onToggle, label }) => {
+  const t = useTranslation();
+  return (
+    <div className="flex flex-row justify-end items-center gap-2 absolute top-1 left-10">
+      <button
+        onClick={onToggle}
+        className="py-1 px-2 rounded-lg text-gray-700 z-20"
+        aria-label={isOn ? `Hide ${label}` : `Show ${label}`}
+      >
+        <div>
+          {isOn ? <BsToggleOn className="text-3xl text-green-600" /> : <BsToggleOff className="text-3xl text-gray-400" />}
+        </div>
+      </button>
+      <div>{isOn ? `${t.show}` : `${t.hide}`}{label}</div>
+    </div>
+  );
+};
+
 const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
   const t = useTranslation();
   const [dimensions, setDimensions] = useState({
-    width: { value: 9, unit: 'm' },
-    height: { value: 13, unit: 'm' },
-    border: { value: 0, unit: 'm' },
-    plantDiameter: { value: 2, unit: 'm' },
+    width: { value: 4, unit: 'm' },
+    height: { value: 4, unit: 'm' },
+    border: { value: 1, unit: 'm' },
+    plantDiameter: { value: 1, unit: 'm' },
     spacing: { value: 1, unit: 'm' },
     pattern: 'triangle',
     gridWidth: 1,
@@ -279,14 +282,14 @@ const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
     }));
   };
 
-  const DimensionInput = ({ label, field, sign }) => (
+  const DimensionInput = ({ label, field, sign, min }) => (
     <div className="w-full space-y-2">
-      <label className="flex flex-row items-center px-2 gap-2 text-sm font-medium text-gray-700">{label} {sign}</label>
+      <label className="flex flex-row items-center px-2 gap-2 text-lg font-medium text-gray-700">{label} {sign}</label>
       <div className="flex gap-2">
         <input
           type="number"
           value={dimensions[field].value}
-          min="0"
+          min={min}
           onChange={(e) => handleDimensionChange(field, e.target.value)}
           className="w-2/3 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
@@ -304,15 +307,15 @@ const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
   );
 
   return (
-    <div className="min-h-screen flex flex-col sm:flex-row justify-center font-poppins text-base bg-mainBG-light shadow-inner">
+    <div className="min-h-screen pt-2 pb-4 flex flex-col sm:flex-row justify-center font-poppins text-base bg-design-bg-light shadow-inner">
 
       {/* Input Section */}
-      <div className="w-full mx-4 my-8 sm:max-w-1/4 p-2 sm:p-4 sm:my-4 bg-white rounded-lg shadow-xl">
+      <div className="w-full mx-2 my-4 sm:max-w-1/4 p-2 sm:p-4 sm:my-4 bg-white rounded-lg shadow-xl">
         <div>
           <p className="text-2xl pt-4 text-center">{t.designTitle}</p>
         </div>
         <div className="p-4 space-y-4">
-          <label className="flex flex-row justify-between px-2 text-sm font-medium text-gray-700">
+          <label className="flex flex-row justify-between px-2 text-lg font-medium text-gray-700">
             {t.pattern}: <CgMenuGridO className={`text-lg ${dimensions.pattern !== 'square' ? 'rotate-45' : ''}`} />
           </label>
           <select
@@ -328,7 +331,7 @@ const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
           {dimensions.pattern !== 'square' && (
             <div className="space-y-4">
               <div className="space-y-2">
-                <label className="flex flex-row items-center px-2 text-sm font-medium text-gray-700">
+                <label className="flex flex-row items-center px-2 text-lg font-medium text-gray-700">
                   {t.gridWidthMultiplier} <CgArrowsExpandDownRight className="text-lg ml-2 -rotate-45" />
                 </label>
                 <input
@@ -342,7 +345,7 @@ const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
                 />
               </div>
               <div className="space-y-2">
-                <label className="flex flex-row items-center px-2 text-sm font-medium text-gray-700">
+                <label className="flex flex-row items-center px-2 text-lg font-medium text-gray-700">
                   {t.gridHeightMultiplier} <CgArrowsExpandDownRight className="text-lg ml-2 -rotate-135" />
                 </label>
                 <input
@@ -358,28 +361,28 @@ const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
             </div>
           )}
 
-          <DimensionInput label={t.gardenWidth} field="width" sign={<CgArrowsShrinkH className="text-lg" />} />
-          <DimensionInput label={t.gardenHeight} field="height" sign={<CgArrowsShrinkH className="text-lg rotate-90" />} />
-          <DimensionInput label={t.plantDiameter} field="plantDiameter" sign={<FaCircle className="text-sm" />} />
-          <DimensionInput label={t.plantSpacing} field="spacing" sign={<FaRegDotCircle className="text-lg" />} />
-          <DimensionInput label={t.borderWidth} field="border" sign={<AiOutlineBorder className="text-lg" />} />
+          <DimensionInput label={t.gardenWidth} field="width" sign={<CgArrowsShrinkH className="text-lg" min="1" />} />
+          <DimensionInput label={t.gardenHeight} field="height" sign={<CgArrowsShrinkH className="text-lg rotate-90" min="1" />} />
+          <DimensionInput label={t.plantDiameter} field="plantDiameter" sign={<FaCircle className="text-lg" min="1" />} />
+          <DimensionInput label={t.plantSpacing} field="spacing" sign={<FaRegDotCircle className="text-lg" min="0" />} />
+          <DimensionInput label={t.borderWidth} field="border" sign={<AiOutlineBorder className="text-lg" min="0" />} />
 
-          <div className="mt-6 p-4 bg-mainBG-light rounded-lg drop-shadow-sm space-y-2">
-            <p className="text-sm text-gray-600">{t.totalArea}: <span className="font-medium text-gray-900">{results.totalArea.toFixed(2)} m²</span></p>
-            <p className="text-sm text-gray-600">{t.plantingArea}: <span className="font-medium text-gray-900">{results.plotArea.toFixed(2)} m²</span></p>
-            <p className="text-sm text-gray-600">{t.borderArea}: <span className="font-medium text-gray-900">{results.borderArea.toFixed(2)} m²</span></p>
-            <p className="text-sm text-gray-600">{t.plantCount}: <span className="font-medium text-gray-900">{results.plantCount}</span></p>
+          <div className="mt-6 p-4 bg-mainBG-light rounded-lg bg-emerald-50 drop-shadow-sm space-y-2">
+            <p className="text-lg text-gray-600">{t.totalArea}: <span className="font-medium text-gray-900">{results.totalArea.toFixed(2)} {t.unit}</span></p>
+            <p className="text-lg text-gray-600">{t.plantingArea}: <span className="font-medium text-gray-900">{results.plotArea.toFixed(2)} {t.unit}</span></p>
+            <p className="text-lg text-gray-600">{t.borderArea}: <span className="font-medium text-gray-900">{results.borderArea.toFixed(2)} {t.unit}</span></p>
+            <p className="text-lg text-gray-600">{t.plantCount}: <span className="font-medium text-gray-900">{results.plantCount}</span> {t.plantUnit}</p>
             <div className="space-y-2">
               {dimensions.pattern === 'square' && (
-                <p className="text-sm text-gray-600">{t.plantsInTriangle}: <span className="font-medium text-gray-900">{results.trianglePlantCount}</span></p>
+                <p className="text-md text-gray-600">{t.plantsInTriangle}: <span className="font-medium text-gray-900">{results.trianglePlantCount}</span> {t.plantUnit} </p>
               )}
               {dimensions.pattern === 'triangle' && (
-                <p className="text-sm text-gray-600">{t.plantsInSquare}: <span className="font-medium text-gray-900">{results.squarePlantCount}</span></p>
+                <p className="text-lg text-gray-600">{t.plantsInSquare}: <span className="font-medium text-gray-900">{results.squarePlantCount}</span> {t.plantUnit} </p>
               )}
               {dimensions.pattern === 'rectangle' && (
                 <>
-                  <p className="text-sm text-gray-600">{t.plantsInSquare}: <span className="font-medium text-gray-900">{results.squarePlantCount}</span></p>
-                  <p className="text-sm text-gray-600">{t.plantsInTriangle}: <span className="font-medium text-gray-900">{results.trianglePlantCount}</span></p>
+                  <p className="text-lg text-gray-600">{t.plantsInSquare}: <span className="font-medium text-gray-900">{results.squarePlantCount}</span>{t.plantUnit}</p>
+                  <p className="text-lg text-gray-600">{t.plantsInTriangle}: <span className="font-medium text-gray-900">{results.trianglePlantCount}</span> {t.plantUnit}</p>
                 </>
               )}
             </div>
@@ -388,7 +391,7 @@ const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
       </div>
 
       {/* Visualization Section */}
-      <div className="relative mx-4 my-4 py-12 px-12 bg-white rounded-lg shadow-xl">
+      <div className="relative w-full sm:w-auto mx-4 my-4 py-12 px-12 bg-white rounded-lg shadow-xl">
         <ToggleButton
           isOn={showDimensions}
           onToggle={() => setShowDimensions(!showDimensions)}
@@ -401,50 +404,63 @@ const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
         >
           {showDimensions && (
             <>
-              <div className="absolute px-4 bg-white -bottom-8 left-1/2 transform -translate-x-1/2 rounded text-sm font-medium text-black z-10">
+              {/* Width indicator */}
+              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 z-10 bg-emerald-100 rounded-lg px-2 py-1 text-sm font-light  text-black ">
                 {t.gardenWidth}: {dimensions.width.value} {dimensions.width.unit}
               </div>
               <div
                 className="absolute -bottom-5 left-1/2 transform -translate-x-1/2 bg-black z-0"
                 style={{ width: `${convertToMeters(dimensions.width.value, dimensions.width.unit) * scale}px`, height: "1px" }}
               />
-              <div className="absolute px-4 bg-white -right-20 top-1/2 transform -translate-y-1/2 rotate-90 rounded text-sm font-medium text-black z-10">
+
+              {/* Height indicator */}
+              <div className="absolute -right-20 top-1/2 transform -translate-y-1/2 z-10 rotate-90 text-black bg-emerald-100 rounded-lg px-2 py-1 text-sm font-light ">
                 {t.gardenHeight}: {dimensions.height.value} {dimensions.height.unit}
               </div>
               <div
                 className="absolute inset-y-1/2 -right-6 transform translate-x-1/2 rotate-90 bg-black z-0"
                 style={{ width: `${convertToMeters(dimensions.height.value, dimensions.height.unit) * scale}px`, height: "1px" }}
               />
-              <div
-                className="absolute -top-4 right-0 bg-black flex items-center z-30"
-                style={{ width: `${Math.max(1, convertToMeters(dimensions.border.value, dimensions.border.unit) * scale)}px`, height: "1px" }}
-              />
-              {dimensions.border.value !== 0 && (
-                <p className="absolute -top-10 -right-0 z-30 text-sm font-medium text-black pl-10">
-                  Border: {dimensions.border.value / 2} {dimensions.border.unit}
-                </p>
-              )}
             </>
           )}
 
+          {/* Border area */}
           <div
-            className="absolute flex justify-center items-center bg-sky-100"
+            className="absolute flex justify-center items-center bg-design-border_area"
             style={{
               width: `${convertToMeters(dimensions.width.value, dimensions.width.unit) * scale}px`,
               height: `${convertToMeters(dimensions.height.value, dimensions.height.unit) * scale}px`
             }}
           >
+            {showDimensions && (
+              <>
+                {/* Border indicator */}
+                <div
+                  className="absolute -top-2 right-0 z-30 bg-black flex items-center "
+                  style={{ width: `${Math.max(1, convertToMeters(dimensions.border.value, dimensions.border.unit) * scale)}px`, height: "1px" }}
+                />
+                {dimensions.border.value !== 0 && (
+                  <p className="absolute -top-11 -right-0 z-30 bg-emerald-100 rounded-lg px-2 py-1 text-sm font-light text-black">
+                    Border: {dimensions.border.value / 2} {dimensions.border.unit}
+                  </p>
+                )}
+              </>
+            )}
+
+            {/* Grow area */}
             <div
-              className="absolute bg-emerald-200 flex justify-center items-center"
+              className="absolute bg-design-grow_area flex justify-center items-center"
               style={{
                 width: `${(convertToMeters(dimensions.width.value, dimensions.width.unit) - 2 * convertToMeters(dimensions.border.value, dimensions.border.unit)) * scale}px`,
                 height: `${(convertToMeters(dimensions.height.value, dimensions.height.unit) - 2 * convertToMeters(dimensions.border.value, dimensions.border.unit)) * scale}px`
               }}
             >
+
+              {/* Plant dots */}
               {results.plantPositions.map((plant, index) => (
                 <div
                   key={index}
-                  className="absolute rounded-full bg-green-500 transition-all duration-300 hover:bg-green-600"
+                  className="absolute z-20 rounded-full bg-design-plant_dot transition-all duration-300 hover:bg-design-plant_dot-hover"
                   style={{
                     width: `${convertToMeters(dimensions.plantDiameter.value, dimensions.plantDiameter.unit) * scale}px`,
                     height: `${convertToMeters(dimensions.plantDiameter.value, dimensions.plantDiameter.unit) * scale}px`,
@@ -460,11 +476,11 @@ const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
                   {results.plantPositions.slice(0, 1).map((plant, index) => (
                     <React.Fragment key={index}>
                       <div
-                        className="absolute bg-emerald-100 rounded-lg p-1 text-sm font-medium text-black transform -translate-x-1/2"
+                        className="absolute bg-emerald-100 rounded-lg p-1 text-sm font-light text-black transform -translate-x-1/2"
                         style={{
                           left: `${plant.x * scale + (convertToMeters(dimensions.plantDiameter.value, dimensions.plantDiameter.unit) * scale) / 2}px`,
                           top: `${plant.y * scale - 10}px`,
-                          zIndex: 20
+                          zIndex: 30
                         }}
                       >
                         {t.plantSpacing}: {dimensions.spacing.value / 2} {dimensions.spacing.unit}

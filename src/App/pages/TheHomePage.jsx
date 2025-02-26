@@ -2,32 +2,8 @@ import React, { useState, useEffect, useRef, useMemo, lazy } from 'react';
 import { FaCalculator, FaSeedling, FaLightbulb, FaBookOpen, FaRulerCombined, FaSlidersH } from 'react-icons/fa';
 import { SlScreenDesktop } from "react-icons/sl";
 import { Link, useNavigate, useLocation } from 'react-router';
-import { ErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from '../components/LanguageContext';
-import { Helmet } from 'react-helmet';
 import { BottomMain, BottomSecondary } from '../ui/BottonStyle';
-
-// Add ErrorComponent definition
-const ErrorComponent = () => {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="text-center p-8 bg-white rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-red-600 mb-4">
-          Oops! Something went wrong
-        </h2>
-        <p className="text-gray-600 mb-4">
-          We're sorry, but there was an error loading this page.
-        </p>
-        <button
-          onClick={() => window.location.reload()}
-          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-        >
-          Refresh Page
-        </button>
-      </div>
-    </div>
-  );
-};
 
 // Import images
 import heroImage from '../public/images/Garden_Plans_Calculator.jpg';
@@ -36,8 +12,6 @@ import step1Image from '../public/images/calculate_step_1.png';
 import step2Image from '../public/images/calculate_step_2.png';
 import step3Image from '../public/images/calculate_step_3.png';
 
-import calculate_tools from '../public/images/calculate_tools.png';
-
 function TheHomePage() {
   const t = useTranslation();
 
@@ -45,7 +19,7 @@ function TheHomePage() {
     return (
       <section
         style={{ backgroundImage: `url('${heroImage}')` }}
-        className="relative h-[calc(100vh-6rem)] sm:h-[calc(100vh-5rem)] flex justify-center items-center bg-cover bg-center bg-no-repeat rounded-lg mx-4"
+        className={`relative h-[calc(100vh-6rem)] sm:h-[calc(100vh-5rem)] flex justify-center items-center bg-cover bg-center bg-no-repeat rounded-lg mx-4`}
       >
         <div className="absolute inset-0 bg-black/20 rounded-lg"></div>
 
@@ -68,24 +42,24 @@ function TheHomePage() {
   const FeatureSection = () => {
     const features = useMemo(() => [
       {
-        icon: <FaSlidersH className="h-12 w-12 mx-auto mb-4 text-blue-600" />,
+        icon: <FaSlidersH className="h-12 w-12 mx-auto mb-4 text-emerald-600" />,
         title: `${t.homeFeature1Title}`,
         description: `${t.homeFeature1Description}`,
       },
       {
-        icon: <FaRulerCombined className="h-12 w-12 mx-auto mb-4 text-blue-600" />,
+        icon: <FaRulerCombined className="h-12 w-12 mx-auto mb-4 text-emerald-500" />,
         title: `${t.homeFeature2Title}`,
         description: `${t.homeFeature2Description}`,
       },
       {
-        icon: <SlScreenDesktop className="h-12 w-12 mx-auto mb-4 text-blue-600" />,
+        icon: <SlScreenDesktop className="h-12 w-12 mx-auto mb-4 text-emerald-400" />,
         title: `${t.homeFeature3Title}`,
         description: `${t.homeFeature3Description}`,
       },
     ], []);
 
     return (
-      <section className="my-2 py-2 sm:my-4 sm:py-4">
+      <section className="container mx-auto my-2 py-2 sm:my-4 sm:py-4">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap justify-center gap-4">
             {features.map((feature, index) => (
@@ -112,7 +86,7 @@ function TheHomePage() {
 
   const DesignPlotSection = () => {
     return (
-      <section className="my-2 py-2 sm:my-4 sm:py-4">
+      <section className="my-2 py-2 sm:my-6 sm:py-4">
         <div className="container mx-auto px-4">
           <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4">
             <div className="w-full flex-1 mb-4 sm:mb-0">
@@ -125,10 +99,10 @@ function TheHomePage() {
             </div>
             <div className="w-full flex-1">
               <h2 className="text-2xl sm:text-3xl font-bold mb-2">
-                Plan Your Perfect Plot
+                {t.homeDesignPlotTitle}
               </h2>
               <p className="text-base sm:text-lg text-gray-700">
-                Our user-friendly tool makes it easy to plan and visualize your ideal garden layout, whether you're an experienced gardener or a complete beginner. With this intuitive platform, you can explore various garden designs, plant arrangements, and spacing options to ensure everything fits perfectly. Simply choose your preferred layout, add your plants, and see how they’ll grow together. The tool helps you avoid overcrowding and poor spacing, making it easy to create a healthy and thriving garden. No matter your experience level, you’ll be able to design a beautiful, functional garden that reflects your unique style!
+                {t.homeDesignPlotDescription}
               </p>
             </div>
           </div>
@@ -139,159 +113,158 @@ function TheHomePage() {
 
   function BeginnersGuide() {
     return (
-      <section className="relative my-2 py-2 sm:my-4 sm:py-4">
+      <section className="relative my-2 py-2 sm:my-4 sm:py-4 bg-emerald-50">
 
-        <div className={`h-[50vh]`}></div>
+        {/* Heading */}
+        <h2 className="text-2xl sm:text-3xl font-bold text-center my-2">
+          {t.homeBeginnersGuideTitle}
+        </h2>
 
-        <h2 className=" sticky h-[50vh] top-0 sm:top-8 text-lg sm:text-3xl font-bold text-center font-serif">Your Gardening Journey Starts Here</h2>
-
-        <p className="sticky h-[50vh] top-18 sm:top-20 text-lg text-gray-700 text-center">
-          Plan your perfect garden with our easy-to-use Plot Calculator.
+        {/* Paragraph */}
+        <p className="text-lg text-gray-700 text-center mb-4 px-2">
+          {t.homeBeginnersGuideDescription}
         </p>
 
-        <div className={`sticky h-screen top-26 left-0 grid grid-cols-10 grid-rows-8 gap-2 p-4`}>
-          <div className=' col-start-2 col-end-4 row-start-1 row-end-3 rounded'>
-            <img src={step1Image} alt="Step1" className='w-full h-full object-contain' />
+        {/* Cards Container */}
+        <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row gap-6 sm:gap-8 justify-center">
+          {/* Step 1 Card */}
+          <div className="bg-white rounded-lg overflow-hidden w-full sm:w-1/3">
+            <img
+              src={step1Image}
+              alt="Step 1: Planning"
+              className="w-auto h-[40vh] object-cover mx-auto"
+            />
+            <div className="p-4">
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                {t.homeBeginnersGuideStep1Title}
+              </h3>
+              <p className="text-gray-600">{t.homeBeginnersGuideStep1Description}</p>
+            </div>
+          </div>
+
+          {/* Step 2 Card */}
+          <div className="bg-white rounded-lg overflow-hidden w-full sm:w-1/3">
+            <img
+              src={step2Image}
+              alt="Step 2: Getting Started"
+              className="w-auto h-auto object-cover mx-auto"
+            />
+            <div className="p-4">
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                {t.homeBeginnersGuideStep2Title}
+              </h3>
+              <p className="text-gray-600">{t.homeBeginnersGuideStep2Description}</p>
+            </div>
+          </div>
+
+          {/* Step 3 Card */}
+          <div className="bg-white rounded-lg overflow-hidden w-full sm:w-1/3">
+            <img
+              src={step3Image}
+              alt="Step 3: Execution"
+              className="w-auto h-[40vh] object-cover mx-auto"
+            />
+            <div className="p-4">
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                {t.homeBeginnersGuideStep3Title}
+              </h3>
+              <p className="text-gray-600">{t.homeBeginnersGuideStep3Description}</p>
+            </div>
           </div>
         </div>
 
-        <div className={`sticky h-screen top-0 left-0 right-0 grid grid-cols-10 grid-rows-8 gap-2 p-4`}>
-          <div className=' col-start-2 col-end-4 row-start-3 row-end-8 rounded'>
-            <img src={step2Image} alt="Step2" className='w-full h-full object-contain' />
-          </div>
-        </div>
 
-        <div className={`sticky h-screen top-26 left-0 right-0 grid grid-cols-10 grid-rows-8 gap-2 p-4`}>
-          <div className=' col-start-4 col-end-10 row-start-1 row-end-8 rounded'>
-            <img src={step3Image} alt="Step3" className='w-full h-full object-contain' />
-          </div>
-        </div>
-
-        <div className='h-[50vh]'></div>
-      </section >
+      </section>
     );
-  };
+  }
 
-  // time out animation version
-  // const BeginnersGuide = () => {
-  //   const [activeStep, setActiveStep] = useState(0);
-  //   const totalSteps = 5;
+  const GuideBlogPosts = () => {
+    const [articles, setArticles] = useState([]); // All articles
+    const [isLoading, setIsLoading] = useState(true); // Loading state
+    const [error, setError] = useState(null); // Error handling
 
-  //   useEffect(() => {
-  //     const timer = setInterval(() => {
-  //       setActiveStep((prev) => (prev < totalSteps - 1 ? prev + 1 : prev));
-  //     }, 700);
+    const fetchArticles = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch("/api/blog");
+        const data = await response.json();
 
-  //     return () => clearInterval(timer);
-  //   }, []);
+        // Check if the response is valid
+        if (data && Array.isArray(data.blogs)) {
+          setArticles(data.blogs);
+        } else {
+          throw new Error("Invalid API response format");
+        }
+      } catch (err) {
+        setError(err.message || "Failed to fetch articles");
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  //   const getStepStyle = (stepNumber) => {
-  //     const isActive = activeStep >= stepNumber;
-  //     return `transition-all duration-1000 ease-in-out ${isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-full'
-  //       }`;
-  //   };
+    useEffect(() => {
+      fetchArticles();
+    }, []);
 
-  //   return (
-  //     <section className="my-2 py-2 sm:my-4 sm:py-4">
-  //       <div className={`h-[50vh]`}></div>
-
-  //       <div className={`sticky top-0 rounded ${getStepStyle(0)}`}>
-  //         <h2 className="text-3xl font-bold text-center font-serif">
-  //           Your Gardening Journey Starts Here
-  //         </h2>
-  //       </div>
-
-  //       <div className={`sticky top-12 rounded ${getStepStyle(1)}`}>
-  //         <p className="text-lg mb-8 text-gray-700 text-center">
-  //           Plan your perfect garden with our easy-to-use Plot Calculator.
-  //         </p>
-  //       </div>
-
-  //       <div className="h-screen relative grid grid-cols-8 grid-rows-5 gap-2 p-4">
-  //         <div className={`sticky top-30 col-start-2 col-end-3 row-start-1 row-end-2 rounded ${getStepStyle(2)}`}>
-  //           <img src={step1Image} alt="Step1" className='w-full h-full object-contain' />
-  //         </div>
-
-
-  //         <div className={`sticky top-30 col-start-2 col-end-3 row-start-1 row-end-5  p-4 rounded ${getStepStyle(3)}`}>
-  //           <img src={step2Image} alt="Step2" className='w-full h-full object-contain' />
-  //         </div>
-
-
-
-  //         <div className={`sticky top-30 col-start-3 col-end-8 row-start-1 row-end-5  p-4 rounded ${getStepStyle(4)}`}>
-  //           <img src={step3Image} alt="Step3" className='w-full h-full object-contain' />
-  //         </div>
-  //       </div>
-  //       <div className='h-[120vh]'></div>
-
-
-
-  //     </section >
-  //   );
-  // };
-
-  const LatestBlogPosts = () => {
-    const blogPosts = [
-      {
-        title: "Smart Irrigation: Saving Water and Boosting Yields",
-        summary:
-          "Discover how smart irrigation systems use sensors and automation to optimize water usage for healthier plants and a more sustainable garden.",
-        link: "/blog/smart-irrigation",
-      },
-      {
-        title: "Vertical Farming: Growing Up, Not Out",
-        summary:
-          "Explore the innovative world of vertical farming, where crops are grown in vertical layers to maximize space and efficiency.",
-        link: "/blog/vertical-farming",
-      },
-      {
-        title: "AI-Powered Plant Identification Apps: Know Your Plants Instantly",
-        summary:
-          "Learn about the latest AI-powered apps that can identify plants from a photo, providing valuable information and care tips.",
-        link: "/blog/plant-identification-apps",
-      },
-    ];
+    if (isLoading) return <p>Loading...</p>;
+    if (error) return (
+      <div>
+        <p className="text-red-500">{error}</p>
+        <button onClick={fetchArticles} className="text-blue-500">Retry</button>
+      </div>
+    );
+    // Filter once and store the result
+    const filteredArticles = articles.filter((post) =>
+      post.tagItems.some((tag) => tag.toLowerCase().includes("guide"))
+    );
 
     return (
-      <section className="py-8 bg-emerald-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-4 text-center">
-            Stay Up-to-Date on Gardening Tech
-          </h2>
-          <p className="text-lg mb-8 text-gray-700 text-center">
-            Learn about the latest innovations in agriculture and how they can help
-            you grow smarter.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {blogPosts.map((post, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-lg shadow-md p-6 transform transition duration-300 hover:scale-105"
-              >
-                <h3 className="text-xl font-semibold mb-2">{post.title}</h3>
-                <p className="text-gray-700 mb-4 line-clamp-3">
-                  {post.summary}
-                </p>
+      <section className="my-2 py-2 sm:my-4 sm:py-4">
+        <h2 className="text-lg sm:text-3xl font-bold text-center mb-4">{t.homeGuideBlogTitle}</h2>
+        <p className="text-lg text-gray-700 text-center mb-8 px-2">{t.homeGuideBlogDescription}</p>
+        <div className="flex flex-wrap justify-center gap-4">
+          {
+            // If filteredArticles is not empty, render them
+            filteredArticles.length > 0 ? (
+              filteredArticles.map((post) => (
                 <Link
-                  to={post.link}
-                  className="text-emerald-600 hover:text-emerald-800 transition duration-300"
+                  to={`/blog/${post.id}`}
+                  key={post.id}
+                  className="w-80 bg-white rounded-lg shadow-md overflow-hidden"
                 >
-                  Read More
+                  <img
+                    src={post.imageURL || '/default-image.jpg'} // Fallback if imageURL is missing
+                    alt={post.imageALT || "Blog Post Image"}
+                    className="w-full h-auto max-h-48 object-cover"
+                  />
+                  <div className="p-4">
+                    <h2 className="text-lg font-bold">{post.title || 'Untitled Post'}</h2>
+                    {post.tagItems && post.tagItems.length > 0 && (
+                      <div className="mt-2">
+                        {post.tagItems.map((tag, index) => (
+                          <span
+                            key={index}
+                            className="inline-block bg-gray-200 rounded-full px-2 py-1 text-xs font-medium mr-2"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    <p className="mt-2 text-sm line-clamp-3">{post.summary || 'No summary available'}</p>
+                    <span className="text-blue-500 hover:underline">
+                      {t?.blogReadMore || 'Read more'}
+                    </span>
+                  </div>
                 </Link>
-              </div>
-            ))}
-          </div>
-          <div className="text-center mt-8">
-            <Link
-              to="/blog"
-              className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded transition duration-300 md:text-lg"
-            >
-              Read the Blog
-            </Link>
-          </div>
+              ))
+            ) : (
+              <p className="text-center text-gray-500">{t?.blogNoArticles || 'No articles found'}</p>
+            )
+          }
         </div>
       </section>
+
     );
   };
 
@@ -316,9 +289,8 @@ function TheHomePage() {
     ];
 
     return (
-      <section className="py-8">
+      <section className="my-2 py-2 sm:my-6 sm:py-4">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-4 text-center">Inspiration Gallery</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {images.map((image, index) => (
               <div key={index} className="overflow-hidden rounded-lg shadow-md">
@@ -339,21 +311,9 @@ function TheHomePage() {
     return (
       <section className="py-8">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Get Your Perfect Garden?</h2>
+          <h2 className="text-3xl font-bold mb-4">{t.homeCallToActionTitle}</h2>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <BottomMain to="/design" text={t.startDesigning} />
-            {/* <Link
-              to="/design"
-              className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded transition duration-300"
-            >
-              Start Designing Your Plot
-            </Link> */}
-            {/* <Link
-              to="/introduction"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded transition duration-300"
-            >
-              Start Growing Your Garden
-            </Link> */}
           </div>
         </div>
       </section>
@@ -362,16 +322,17 @@ function TheHomePage() {
 
   const AboutUsSection = () => {
     return (
-      <section className="py-8 bg-emerald-50">
-        <div className="container mx-auto px-4 text-center">
-          <Link to="/about"
-            className="text-4xl font-bold mb-4"
+      <section className="my-2 py-2 sm:my-4 sm:py-4 bg-emerald-50">
+        <div className="container mx-auto px-4 text-center py-2" >
+          <Link
+            to="/about"
             onClick={() => window.scrollTo(0, 0)}
+            className="text-4xl font-bold pb-4 mb-4 "
           >
-            Our Story
+            {t.homeAboutUsTitle}
           </Link>
-          <p className="text-lg text-gray-700 mx-auto">
-            We're a team of passionate gardeners and tech enthusiasts who believe that everyone has the potential to grow their own food and create beautiful green spaces. Our mission is to empower both novice and experienced gardeners by providing the tools, resources, and inspiration needed to thrive in their gardening journey.
+          <p className="text-lg text-gray-700 mx-auto pt-4 sm:py-4  text-left sm:text-center">
+            {t.homeAboutUsDescription}
           </p>
         </div>
       </section>
@@ -412,25 +373,17 @@ function TheHomePage() {
   };
 
   return (
-    <>
-      <Helmet>
-        <title>Garden Planner - Design Your Dream Garden</title>
-        <meta name="description" content="Plan your perfect garden with our easy-to-use tools" />
-      </Helmet>
-      <ErrorBoundary FallbackComponent={ErrorComponent}>
-        <main className=' bg-white'>
-          <HeroSection />
-          <FeatureSection />
-          <DesignPlotSection />
-          <BeginnersGuide />
-          <LatestBlogPosts />
-          <Gallery />
-          <CallToAction />
-          <AboutUsSection />
-          <TestimonialSection />
-        </main>
-      </ErrorBoundary>
-    </>
+    <div className=' bg-white'>
+      <HeroSection />
+      <FeatureSection />
+      <DesignPlotSection />
+      <BeginnersGuide />
+      <GuideBlogPosts />
+      <Gallery />
+      <CallToAction />
+      <AboutUsSection />
+      <TestimonialSection />
+    </div>
   );
 }
 

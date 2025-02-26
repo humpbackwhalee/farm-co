@@ -2,14 +2,41 @@
 
 @theme {
     --font-jost: 'Jost', 'Poppins', serif;
-    --font-comfortaa: 'Comfortaa', 'Poppins', serif;
-    --font-poppins: 'Poppins', 'serif';
-    --font-noto-thai: "Noto Sans Thai Looped", serif;
+    --font-comfortaa: 'Comfortaa', 'Noto Sans Thai Looped', serif;
+    --font-poppins: 'Poppins', 'Noto Sans Thai Looped', serif;
 
-    --color-btn-primary: #88b04b;
-    --color-btn-primary-hover: #44883c;
+    --color-logo: #88b04b;
 
-    --color-btn-secondary: #b2e79f;
-    --color-btn-secondary-hover: #202020;
+    --color-text-primary: #312506;
+    --color-text-secondary: #777e5c;
+
+    --color-btn_main: #777e5c;
+    --color-btn_main-hover: #929974;
+    --color-btn_secondary: #B3AC8C;
+    --color-btn_secondary-hover: #C7C2AB;
+
+    --color-footer-bg: #ebf3e2;
+    
+    --color-design-bg-light: #f5f9f1;
+    --color-design-border_area: #E2EAF4;
+    --color-design-grow_area: #F4E3E2;
+    --color-design-plant_dot: #A0C16D;
+    --color-design-plant_dot-hover: #76C16D;
 }
 
+/* --color-dark-theme: #202020;
+--color-light-theme: #d1d8bd;
+--color-light-bg: #f4ece2ff;
+--color-light-olive: #c7c2ab;
+
+--color-light-gray: #dfe0dc;
+--color-light-lime: #d1d8bd;
+--color-dark-olive: #777e5c;
+--color-dark-green: #283106;
+
+
+--color-btn-primary: #88b04b;
+
+--color-btn-secondary: #b2e79f;
+--color-btn-secondary-hover: #202020; */
+  

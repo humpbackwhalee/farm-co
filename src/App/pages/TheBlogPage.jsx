@@ -3,11 +3,6 @@ import { Link, useNavigate, useLocation } from "react-router";
 import { IoIosArrowDropleft, IoIosArrowDropright } from "react-icons/io";
 import { useTranslation } from '../components/LanguageContext';
 
-/**
- * TheBlogPage Component
- * Main component for the blog page that handles article display, filtering, and navigation
- * @returns {JSX.Element} The complete blog page
- */
 function TheBlogPage() {
   const t = useTranslation();
   // State Management
@@ -32,7 +27,7 @@ function TheBlogPage() {
         setIsLoading(true);
         const response = await fetch("/api/blog");
         const data = await response.json();
-        
+
         if (Array.isArray(data.blogs)) {
           setArticles(data.blogs);
         } else {
@@ -72,12 +67,12 @@ function TheBlogPage() {
         article.title,
         article.subtitle,
         article.summary
-      ].some(text => 
+      ].some(text =>
         text.toLowerCase().includes(query.toLowerCase())
       );
 
       // Tag filter
-      const matchesTags = !selectedTags.length || 
+      const matchesTags = !selectedTags.length ||
         article.tagItems.some(tag => selectedTags.includes(tag));
 
       return matchesSearch && matchesTags;
@@ -96,7 +91,7 @@ function TheBlogPage() {
    */
   const handleSearch = (newQuery) => {
     const params = new URLSearchParams(location.search);
-    
+
     if (newQuery) {
       params.set("search", newQuery);
     } else {
@@ -119,7 +114,7 @@ function TheBlogPage() {
         [...selectedTags, tag]; // Add tag
 
     const params = new URLSearchParams(location.search);
-    
+
     if (newTags.length) {
       params.set("tag", newTags.join(","));
     } else {
@@ -127,7 +122,7 @@ function TheBlogPage() {
     }
 
     if (query) params.set("search", query);
-    
+
     navigate(`/blog?${params.toString()}`);
     setSelectedTags(newTags);
   };
@@ -151,12 +146,12 @@ function TheBlogPage() {
     <div className="flex flex-col justify-center">
       {/* Hero Section with Featured Articles */}
       <BlogHeroSection articles={articles} />
-      
+
       <div className="flex flex-col md:flex-row pt-2 md:mt-8">
         {/* Sidebar with Search and Filters */}
         <div className="md:w-1/4 flex flex-col p-4 mx-auto space-y-4">
-          <BlogSearch 
-            query={query} 
+          <BlogSearch
+            query={query}
             onSearch={handleSearch}
             placeholder={t.blogSearchPlaceholder}
           />
@@ -167,10 +162,10 @@ function TheBlogPage() {
             clearText={t.blogClearFilters}
           />
         </div>
-        
+
         {/* Main Content Area */}
-        <BlogPostSection 
-          articles={filteredArticles} 
+        <BlogPostSection
+          articles={filteredArticles}
           noArticlesText={t.blogNoArticles}
           readMoreText={t.blogReadMore}
         />
@@ -206,7 +201,9 @@ const BlogHeroSection = ({ articles }) => {
           className={`relative h-[60vh] bg-cover bg-center rounded-xl ${index !== activeIndex ? "hidden" : ""}`}
           style={{ backgroundImage: `url(${item.imageURL})` }}
         >
-          <Link to={`/blog/${item.id}`}>
+          <Link
+            to={`/blog/${item.id}`}
+            onClick={() => window.scrollTo(0, 0)}>
             <div className="absolute inset-0 bg-gradient-to-r from-black to-transparent rounded-xl opacity-40"></div>
             <div className="absolute w-full md:w-1/2 flex flex-col justify-center text-left text-white p-8 bottom-0 left-0">
               <h1 className="text-2xl md:text-5xl font-bold mb-4">{item.title}</h1>
@@ -309,11 +306,14 @@ const RenderTagFilter = ({ articles, selectedTags, onTagFilter, clearText }) => 
 
 const BlogPostSection = ({ articles, noArticlesText, readMoreText }) => {
   return (
-    <div className="container mx-auto px-4 mb-8">
+    <div className="container mx-auto mb-4">
       <div className="flex flex-wrap justify-center gap-4">
         {articles.length > 0 ? (
           articles.map((post) => (
-            <Link to={`/blog/${post.id}`} key={post.id}>
+            <Link
+              to={`/blog/${post.id}`}
+              key={post.id}
+              onClick={() => window.scrollTo(0, 0)}>
               <div className="w-80 bg-white rounded-lg shadow-md overflow-hidden">
                 <img
                   src={post.imageURL}
@@ -338,6 +338,7 @@ const BlogPostSection = ({ articles, noArticlesText, readMoreText }) => {
                   <Link
                     to={`/blog/${post.id}`}
                     className="text-blue-500 hover:underline"
+                    onClick={() => window.scrollTo(0, 0)}
                   >
                     {readMoreText}
                   </Link>
@@ -349,7 +350,7 @@ const BlogPostSection = ({ articles, noArticlesText, readMoreText }) => {
           <p className="text-center text-gray-500">{noArticlesText}</p>
         )}
       </div>
-    </div>
+    </div >
   );
 };
 

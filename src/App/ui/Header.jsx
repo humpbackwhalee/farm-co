@@ -4,13 +4,13 @@ import { NavLink } from 'react-router';
 import { LuMenu, LuX } from 'react-icons/lu';
 import { useTranslation } from '../components/LanguageContext';
 import LanguageToggleButton from '../components/LanguageToggleButton';
-import { useTheme } from '../components/ThemeContext';
+// import { useTheme } from '../components/ThemeContext';
 import ThemeToggle from '../components/ThemeToggleButton';
 import Logo from '../ui/Logo';
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const { theme } = useTheme();
+  // const { theme } = useTheme();
   const t = useTranslation();
 
   const navItems = useMemo(() => [
@@ -22,14 +22,10 @@ export default function Header() {
   return (
     <>
       <header
-        className={`w-full h-16 px-2 sm:px-4 flex justify-between items-center z-30 
+        className={`w-full h-16 bg-white px-2 sm:px-4 flex justify-between items-center z-30 
           ${isOpen
             ? 'fixed top-0 z-30'
             : ' '}
-          ${theme === 'light'
-            ? 'bg-white'
-            : 'bg-gray-900 text-white'
-          }
         `}
         role="banner"
       >
@@ -44,7 +40,7 @@ export default function Header() {
             <NavLink
               key={item.label}
               to={item.path}
-              className={({ isActive }) => `font-comfortaa ${isActive ? 'font-bold' : ''}`}
+              className={({ isActive }) => `font-comfortaa text-xl ${isActive ? 'font-semibold' : ''}`}
               role='navigation'
               aria-label='Main navigation'
             >
@@ -54,7 +50,7 @@ export default function Header() {
 
           {/* Language and Theme Toggle */}
           <LanguageToggleButton />
-          <ThemeToggle />
+          {/* <ThemeToggle /> */}
         </nav>
 
         {/* Menu Button - Hidden on Desktop and shown on Mobile */}
@@ -71,16 +67,20 @@ export default function Header() {
 
       {/* Mobile Navigation Menu */}
       <div
-        className={`fixed top-16 left-0 right-0 z-50 bg-white overflow-hidden transition-all duration-650 ease-in-out 
+        className={`fixed top-16 left-0 right-0 z-50 overflow-hidden transition-all duration-500 ease-in-out  
           ${isOpen
             ? "max-h-screen opacity-100"
             : "max-h-0 opacity-0"
-          }`}
+          }
+        `}
       >
-        <nav className="h-screen pb-[30vh] flex flex-col justify-center items-center gap-6">
+        <nav className="h-screen pb-[30vh] bg-white flex flex-col justify-center items-center gap-6">
           {navItems.map((item) => (
             <NavLink
-              onClick={() => setIsOpen(false)}
+              onClick={() => { 
+                setIsOpen(false); 
+                window.scrollTo(0, 0) 
+              }}
               key={item.label}
               to={item.path}
               className={({ isActive }) => `font-comfortaa text-3xl ${isActive ? "font-bold" : ""}`}
@@ -94,7 +94,7 @@ export default function Header() {
           {/* Language and Theme Toggle */}
           <div className='flex flex-row justify-center items-center gap-2'>
             <LanguageToggleButton />
-            <ThemeToggle />
+            {/* <ThemeToggle /> */}
           </div>
         </nav>
       </div >
