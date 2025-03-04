@@ -361,6 +361,27 @@ const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
             </div>
           )}
 
+          <div className="w-full space-y-2">
+            <label className="flex flex-row items-center px-2 gap-2 text-lg font-medium text-gray-700"> Test</label>
+            <div className="flex gap-2">
+              <input
+                type="number"
+                value={dimensions['width'].value}
+                onChange={(e) => handleDimensionChange('width', e.target.value)}
+                className="w-2/3 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+              <select
+                value={dimensions['width'].unit}
+                onChange={(e) => handleDimensionChange('width', dimensions['width'].value, e.target.value)}
+                className="w-20 flex-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="m">m</option>
+                <option value="cm">cm</option>
+                <option value="km">km</option>
+              </select>
+            </div>
+          </div>
+
           <DimensionInput label={t.gardenWidth} field="width" sign={<CgArrowsShrinkH className="text-lg" min="1" />} />
           <DimensionInput label={t.gardenHeight} field="height" sign={<CgArrowsShrinkH className="text-lg rotate-90" min="1" />} />
           <DimensionInput label={t.plantDiameter} field="plantDiameter" sign={<FaCircle className="text-lg" min="1" />} />
