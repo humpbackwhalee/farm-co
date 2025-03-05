@@ -1,9 +1,10 @@
 @import "tailwindcss";
 
 @theme {
-    --font-jost: 'Jost', 'Poppins', serif;
-    --font-comfortaa: 'Comfortaa', 'Noto Sans Thai Looped', serif;
-    --font-poppins: 'Poppins', 'Noto Sans Thai Looped', serif;
+    --font-jost: 'Jost', 'Comfortaa', serif;
+    --font-comfortaa: 'Comfortaa', 'Bai Jamjuree', serif;
+    --font-baiJamjuree: 'Bai Jamjuree', 'Comfortaa', serif;
+    --font-navlink: 'Mitr', 'Comfortaa', serif;
 
     --color-logo: #88b04b;
 
@@ -16,7 +17,7 @@
     --color-btn_secondary-hover: #C7C2AB;
 
     --color-footer-bg: #ebf3e2;
-    
+
     --color-design-bg-light: #f5f9f1;
     --color-design-border_area: #E2EAF4;
     --color-design-grow_area: #F4E3E2;
@@ -39,4 +40,3 @@
 
 --color-btn-secondary: #b2e79f;
 --color-btn-secondary-hover: #202020; */
-  

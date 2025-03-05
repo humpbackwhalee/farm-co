@@ -60,7 +60,7 @@ function BlogDetails() {
     const isValidImage = article?.imageURL && (typeof article.imageURL === 'string' || article.imageURL instanceof URL);
 
     return (
-        <article className="container max-w-5xl mx-auto p-4 font-poppins">
+        <article className="container max-w-5xl mx-auto p-4 font-baiJamjuree">
             <div className="flex flex-col md:flex-row lg:flex-row gap-4 mb-8">
                 <div className="flex-1">
                     <h2 className="text-3xl font-bold text-emerald-900 mb-4 md:pt-4">{article?.title}</h2>

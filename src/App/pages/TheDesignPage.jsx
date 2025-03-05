@@ -128,7 +128,7 @@ const calculateRectangularPattern = (plotWidth, plotHeight, plantDiameter, spaci
 const convertToMeters = (value, unit) => {
   switch (unit) {
     case 'cm': return value * 0.01;
-    case 'km': return value * 1000;
+    // case 'km': return value * 1000;
     default: return value; // meters
   }
 };
@@ -154,10 +154,10 @@ const ToggleButton = ({ isOn, onToggle, label }) => {
 const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
   const t = useTranslation();
   const [dimensions, setDimensions] = useState({
-    width: { value: 4, unit: 'm' },
-    height: { value: 4, unit: 'm' },
+    width: { value: 20, unit: 'm' },
+    height: { value: 20, unit: 'm' },
     border: { value: 1, unit: 'm' },
-    plantDiameter: { value: 1, unit: 'm' },
+    plantDiameter: { value: 2, unit: 'm' },
     spacing: { value: 1, unit: 'm' },
     pattern: 'triangle',
     gridWidth: 1,
@@ -282,32 +282,32 @@ const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
     }));
   };
 
-  const DimensionInput = ({ label, field, sign, min }) => (
-    <div className="w-full space-y-2">
-      <label className="flex flex-row items-center px-2 gap-2 text-lg font-medium text-gray-700">{label} {sign}</label>
-      <div className="flex gap-2">
-        <input
-          type="number"
-          value={dimensions[field].value}
-          min={min}
-          onChange={(e) => handleDimensionChange(field, e.target.value)}
-          className="w-2/3 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-        />
-        <select
-          value={dimensions[field].unit}
-          onChange={(e) => handleDimensionChange(field, dimensions[field].value, e.target.value)}
-          className="w-20 flex-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-        >
-          <option value="m">m</option>
-          <option value="cm">cm</option>
-          <option value="km">km</option>
-        </select>
-      </div>
-    </div>
-  );
+  // const DimensionInput = ({ label, field, sign, min }) => (
+  //   <div className="w-full space-y-2">
+  //     <label className="flex flex-row items-center px-2 gap-2 text-lg font-medium text-gray-700">{label} {sign}</label>
+  //     <div className="flex gap-2">
+  //       <input
+  //         type="number"
+  //         value={dimensions[field].value}
+  //         min={min}
+  //         onChange={(e) => handleDimensionChange(field, e.target.value)}
+  //         className="w-2/3 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+  //       />
+  //       <select
+  //         value={dimensions[field].unit}
+  //         onChange={(e) => handleDimensionChange(field, dimensions[field].value, e.target.value)}
+  //         className="w-20 flex-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+  //       >
+  //         <option value="m">m</option>
+  //         <option value="cm">cm</option>
+  //         <option value="km">km</option>
+  //       </select>
+  //     </div>
+  //   </div>
+  // );
 
   return (
-    <div className="min-h-screen pt-2 pb-4 flex flex-col sm:flex-row justify-center font-poppins text-base bg-design-bg-light shadow-inner">
+    <div className="min-h-screen pt-2 pb-4 flex flex-col sm:flex-row justify-center font-baiJamjuree text-base bg-design-bg-light shadow-inner">
 
       {/* Input Section */}
       <div className="w-full mx-2 my-4 sm:max-w-1/4 p-2 sm:p-4 sm:my-4 bg-white rounded-lg shadow-xl">
@@ -361,12 +361,17 @@ const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
             </div>
           )}
 
+          {/* Width */}
           <div className="w-full space-y-2">
-            <label className="flex flex-row items-center px-2 gap-2 text-lg font-medium text-gray-700"> Test</label>
+            <label className="flex flex-row items-center px-2 gap-2 text-lg font-medium text-gray-700">
+              {t.gardenWidth}
+              {<CgArrowsShrinkH className="text-lg" />}
+            </label>
             <div className="flex gap-2">
               <input
                 type="number"
                 value={dimensions['width'].value}
+                min={1}
                 onChange={(e) => handleDimensionChange('width', e.target.value)}
                 className="w-2/3 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
@@ -377,16 +382,120 @@ const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
               >
                 <option value="m">m</option>
                 <option value="cm">cm</option>
-                <option value="km">km</option>
+                {/* <option value="km">km</option> */}
               </select>
             </div>
           </div>
 
-          <DimensionInput label={t.gardenWidth} field="width" sign={<CgArrowsShrinkH className="text-lg" min="1" />} />
+          {/* Height */}
+          <div className="w-full space-y-2">
+            <label className="flex flex-row items-center px-2 gap-2 text-lg font-medium text-gray-700">
+              {t.gardenHeight}
+              {<CgArrowsShrinkH className="text-lg rotate-90" />}
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="number"
+                value={dimensions['height'].value}
+                min={1}
+                onChange={(e) => handleDimensionChange('height', e.target.value)}
+                className="w-2/3 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+              <select
+                value={dimensions['height'].unit}
+                onChange={(e) => handleDimensionChange('height', dimensions['height'].value, e.target.value)}
+                className="w-20 flex-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="m">m</option>
+                <option value="cm">cm</option>
+                {/* <option value="km">km</option> */}
+              </select>
+            </div>
+          </div>
+
+          {/* Plant Diameter */}
+          <div className="w-full space-y-2">
+            <label className="flex flex-row items-center px-2 gap-2 text-lg font-medium text-gray-700">
+              {t.plantDiameter}
+              {<FaCircle className="text-lg" />}
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="number"
+                value={dimensions['plantDiameter'].value}
+                min={1}
+                onChange={(e) => handleDimensionChange('plantDiameter', e.target.value)}
+                className="w-2/3 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+              <select
+                value={dimensions['plantDiameter'].unit}
+                onChange={(e) => handleDimensionChange('plantDiameter', dimensions['plantDiameter'].value, e.target.value)}
+                className="w-20 flex-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="m">m</option>
+                <option value="cm">cm</option>
+                {/* <option value="km">km</option> */}
+              </select>
+            </div>
+          </div>
+
+          {/* Plant Space */}
+          <div className="w-full space-y-2">
+            <label className="flex flex-row items-center px-2 gap-2 text-lg font-medium text-gray-700">
+              {t.plantSpacing}
+              {<FaCircle className="text-lg" />}
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="number"
+                value={dimensions['spacing'].value}
+                min={0}
+                onChange={(e) => handleDimensionChange('spacing', e.target.value)}
+                className="w-2/3 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+              <select
+                value={dimensions['spacing'].unit}
+                onChange={(e) => handleDimensionChange('spacing', dimensions['spacing'].value, e.target.value)}
+                className="w-20 flex-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="m">m</option>
+                <option value="cm">cm</option>
+                {/* <option value="km">km</option> */}
+              </select>
+            </div>
+          </div>
+
+          {/* Border */}
+          <div className="w-full space-y-2">
+            <label className="flex flex-row items-center px-2 gap-2 text-lg font-medium text-gray-700">
+              {t.borderWidth}
+              {<AiOutlineBorder className="text-lg" />}
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="number"
+                value={dimensions['border'].value}
+                min={0}
+                onChange={(e) => handleDimensionChange('border', e.target.value)}
+                className="w-2/3 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+              <select
+                value={dimensions['border'].unit}
+                onChange={(e) => handleDimensionChange('border', dimensions['border'].value, e.target.value)}
+                className="w-20 flex-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="m">m</option>
+                <option value="cm">cm</option>
+                {/* <option value="km">km</option> */}
+              </select>
+            </div>
+          </div>
+
+          {/* <DimensionInput label={t.gardenWidth} field="width" sign={<CgArrowsShrinkH className="text-lg" min="1" />} />
           <DimensionInput label={t.gardenHeight} field="height" sign={<CgArrowsShrinkH className="text-lg rotate-90" min="1" />} />
           <DimensionInput label={t.plantDiameter} field="plantDiameter" sign={<FaCircle className="text-lg" min="1" />} />
           <DimensionInput label={t.plantSpacing} field="spacing" sign={<FaRegDotCircle className="text-lg" min="0" />} />
-          <DimensionInput label={t.borderWidth} field="border" sign={<AiOutlineBorder className="text-lg" min="0" />} />
+          <DimensionInput label={t.borderWidth} field="border" sign={<AiOutlineBorder className="text-lg" min="0" />} /> */}
 
           <div className="mt-6 p-4 bg-mainBG-light rounded-lg bg-emerald-50 drop-shadow-sm space-y-2">
             <p className="text-lg text-gray-600">{t.totalArea}: <span className="font-medium text-gray-900">{results.totalArea.toFixed(2)} {t.unit}</span></p>
@@ -491,7 +600,7 @@ const PlotCalculator = ({ showDimensions, setShowDimensions }) => {
                 />
               ))}
 
-              {showDimensions && results.plantPositions.length >= 1 && (
+              {showDimensions && results.plantPositions.length >= 1 && dimensions.spacing.value > 0 && (
                 <>
                   {/* plant space name tag */}
                   {results.plantPositions.slice(0, 1).map((plant, index) => (

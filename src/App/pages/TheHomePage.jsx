@@ -27,7 +27,7 @@ function TheHomePage() {
           <h1 className="text-4xl sm:text-6xl font-jost font-bold leading-tight mb-4 text-white">
             {t.homeHeroTitle}
           </h1>
-          <p className="text-xl sm:text-2xl font-poppins text-white/90 mb-8">
+          <p className="text-xl sm:text-2xl font-baiJamjuree text-white/90 mb-8">
             {t.homeHeroSubtitle}
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-2 sm:gap-4">

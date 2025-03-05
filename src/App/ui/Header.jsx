@@ -40,7 +40,7 @@ export default function Header() {
             <NavLink
               key={item.label}
               to={item.path}
-              className={({ isActive }) => `font-comfortaa text-xl ${isActive ? 'font-semibold' : ''}`}
+              className={({ isActive }) => `font-navlink text-xl ${isActive ? 'font-semibold' : ''}`}
               role='navigation'
               aria-label='Main navigation'
             >
@@ -83,7 +83,7 @@ export default function Header() {
               }}
               key={item.label}
               to={item.path}
-              className={({ isActive }) => `font-comfortaa text-3xl ${isActive ? "font-bold" : ""}`}
+              className={({ isActive }) => `font-navlink text-3xl ${isActive ? "font-bold" : ""}`}
               role="navigation"
               aria-label="Main navigation"
             >

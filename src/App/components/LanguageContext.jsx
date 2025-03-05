@@ -178,7 +178,7 @@ export const translations = {
     gridHeightMultiplier: "ระยะห่างระหว่างแถว (แนวตั้ง)",
     gardenWidth: "ความกว้าง",
     gardenHeight: "ความยาว",
-    plantDiameter: "ขนาดกลางต้นไม้ (เส้นผ่านศูนย์กลาง)",
+    plantDiameter: "ขนาดต้นไม้ (เส้นผ่านศูนย์กลาง)",
     plantSpacing: "ระยะห่างระหว่างต้น",
     borderWidth: "ระยะขอบแปลง",
     totalArea: "พื้นที่ทั้งหมด",
